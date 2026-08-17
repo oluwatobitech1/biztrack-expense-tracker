@@ -10,6 +10,10 @@ let isSubmitting = false;
 document.addEventListener('DOMContentLoaded', () => {
   requireSetup();
 
+  const business = getBusiness();
+  const match = CURRENCIES.find((c) => c.code === business.currency);
+  document.getElementById('currency-prefix').textContent = match ? match.symbol : '$';
+
   const params = new URLSearchParams(window.location.search);
   editingId = params.get('edit');
   const presetType = params.get('type');
