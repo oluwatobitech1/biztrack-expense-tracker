@@ -9,7 +9,7 @@ function formatCurrency(amount) {
   const currencyCode = business.currency || 'NGN';
   const match = CURRENCIES.find((c) => c.code === currencyCode);
   const symbol = match ? match.symbol : currencyCode + ' ';
-  const formatted = new Intl.NumberFormat('en-NG', {
+  const formatted = new Intl.NumberFormat(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(Math.abs(Number(amount) || 0));
@@ -19,7 +19,7 @@ function formatCurrency(amount) {
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   if (isNaN(date)) return dateStr;
-  return date.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function applyTheme() {
