@@ -6,9 +6,9 @@
 
 function formatCurrency(amount) {
   const business = getBusiness();
-  const currency = business.currency || 'NGN';
-  const symbols = { NGN: '\u20A6' };
-  const symbol = symbols[currency] || currency + ' ';
+  const currencyCode = business.currency || 'NGN';
+  const match = CURRENCIES.find((c) => c.code === currencyCode);
+  const symbol = match ? match.symbol : currencyCode + ' ';
   const formatted = new Intl.NumberFormat('en-NG', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
@@ -36,8 +36,12 @@ function setGreeting(el) {
   el.textContent = `${greeting} \uD83D\uDC4B`;
 }
 
-/** Redirect to setup if no business profile exists yet. Call on app pages. */
+/** Redirect to login if no session, or to setup if the business profile is incomplete. Call on every app page. */
 function requireSetup() {
+  if (!isLoggedIn()) {
+    window.location.href = 'login.html';
+    return;
+  }
   if (!isSetupComplete()) {
     window.location.href = 'setup.html';
   }
@@ -118,7 +122,17 @@ function createConfirmModal({ modalEl, confirmBtn, cancelBtn, onConfirm }) {
 // Apply theme as early as possible on every page to avoid a flash.
 applyTheme();
 
+function wireLogoutButtons() {
+  document.querySelectorAll('[data-logout]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      logout();
+      window.location.href = 'login.html';
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   highlightActiveNav();
   renderBusinessBadge();
+  wireLogoutButtons();
 });
