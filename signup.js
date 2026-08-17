@@ -8,20 +8,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const countrySelect = document.getElementById('country-select');
   const currencyDisplay = document.getElementById('currency-display');
 
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'Select your country';
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  countrySelect.appendChild(placeholder);
+
   CURRENCIES.forEach((c) => {
     const opt = document.createElement('option');
-    opt.value = c.code;
+    opt.value = c.country; // country name is unique; currency code is not (e.g. EUR is shared)
     opt.textContent = c.country;
     countrySelect.appendChild(opt);
   });
 
   function updateCurrencyDisplay() {
-    const match = CURRENCIES.find((c) => c.code === countrySelect.value);
-    currencyDisplay.textContent = match ? match.label : 'Select a country';
+    const match = CURRENCIES.find((c) => c.country === countrySelect.value);
+    currencyDisplay.textContent = match ? match.label : 'Select a country first';
   }
 
   countrySelect.addEventListener('change', updateCurrencyDisplay);
-  countrySelect.value = 'NGN';
   updateCurrencyDisplay();
 
   document.getElementById('signup-form').addEventListener('submit', handleSignup);
@@ -37,7 +43,7 @@ function handleSignup(e) {
   const countrySelect = document.getElementById('country-select');
   const errorBanner = document.getElementById('auth-error-banner');
 
-  [nameInput, emailInput, passwordInput].forEach((el) => el.classList.remove('is-invalid'));
+  [nameInput, emailInput, passwordInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
   errorBanner.classList.remove('is-visible');
 
   const name = nameInput.value.trim();
@@ -50,6 +56,10 @@ function handleSignup(e) {
   if (!name) {
     nameInput.classList.add('is-invalid');
     message = 'Please enter your full name.';
+    hasError = true;
+  } else if (!countrySelect.value) {
+    countrySelect.classList.add('is-invalid');
+    message = 'Please select your country.';
     hasError = true;
   } else if (!email || !isValidEmail(email)) {
     emailInput.classList.add('is-invalid');
@@ -70,15 +80,14 @@ function handleSignup(e) {
     return;
   }
 
-  const currencyCode = countrySelect.value;
-  const match = CURRENCIES.find((c) => c.code === currencyCode);
+  const match = CURRENCIES.find((c) => c.country === countrySelect.value);
 
   createAccount({
     name,
     email,
     password,
-    country: match ? match.country : '',
-    currency: currencyCode
+    country: countrySelect.value,
+    currency: match ? match.code : 'USD'
   });
 
   window.location.href = 'setup.html';
