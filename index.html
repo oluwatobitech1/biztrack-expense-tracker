@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BizTrack — Know where your business money goes</title>
-  <meta name="description" content="Track income, expenses and profit from one simple dashboard. Built for Nigerian small businesses." />
+  <meta name="description" content="Track income, expenses and profit from one simple dashboard. Built for small businesses everywhere." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -25,7 +25,7 @@
 
   <section class="hero">
     <div>
-      <span class="hero-eyebrow">Built for Nigerian small businesses</span>
+      <span class="hero-eyebrow">Built for small businesses everywhere</span>
       <h1>Know where your business money goes.</h1>
       <p class="hero-sub">Track income, expenses and profit from one simple dashboard. No accounting background needed.</p>
       <div class="hero-actions">
@@ -44,15 +44,15 @@
       <div class="hero-preview-stats">
         <div class="hero-preview-stat">
           <div class="label">Income</div>
-          <div class="value" style="color: var(--color-income);">₦850k</div>
+          <div class="value" style="color: var(--color-income);">$850k</div>
         </div>
         <div class="hero-preview-stat">
           <div class="label">Expenses</div>
-          <div class="value" style="color: var(--color-expense);">₦320k</div>
+          <div class="value" style="color: var(--color-expense);">$320k</div>
         </div>
         <div class="hero-preview-stat">
           <div class="label">Profit</div>
-          <div class="value" style="color: var(--color-profit);">₦530k</div>
+          <div class="value" style="color: var(--color-profit);">$530k</div>
         </div>
       </div>
       <div class="flow-bar">
@@ -65,15 +65,15 @@
       <div class="hero-preview-list">
         <div class="mini-row">
           <span class="mini-desc">Customer payment</span>
-          <span class="mini-amount--income">+₦50,000</span>
+          <span class="mini-amount--income">+$50,000</span>
         </div>
         <div class="mini-row">
           <span class="mini-desc">Fabric purchase</span>
-          <span class="mini-amount--expense">-₦20,000</span>
+          <span class="mini-amount--expense">-$20,000</span>
         </div>
         <div class="mini-row">
           <span class="mini-desc">Delivery</span>
-          <span class="mini-amount--expense">-₦5,000</span>
+          <span class="mini-amount--expense">-$5,000</span>
         </div>
       </div>
     </div>
@@ -158,11 +158,11 @@
             name: 'Demo User',
             email: 'demo@biztrack.app',
             password: 'demo1234',
-            country: 'Nigeria',
-            currency: 'NGN'
+            country: 'United States',
+            currency: 'USD'
           });
         }
-        saveBusiness({ name: 'Demo Business', type: 'Retail', currency: 'NGN' });
+        saveBusiness({ name: 'Demo Business', type: 'Retail', currency: 'USD' });
         const demo = [
           { type: 'income', amount: 50000, description: 'Customer payment', category: 'Sales', paymentMethod: 'Bank Transfer', date: new Date().toISOString().split('T')[0] },
           { type: 'expense', amount: 20000, description: 'Stock purchase', category: 'Stock', paymentMethod: 'Cash', date: new Date().toISOString().split('T')[0] },
