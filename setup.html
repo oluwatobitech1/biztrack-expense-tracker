@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Set up your business — BizTrack</title>
+  <title>Create your account — BizTrack</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -12,49 +12,53 @@
 <body>
 
   <div class="setup-shell">
-    <div class="card setup-card">
-      <div class="setup-progress">
-        <div class="setup-progress-dot" id="progress-dot-1"></div>
-        <div class="setup-progress-dot" id="progress-dot-2"></div>
-      </div>
+    <div class="card setup-card auth-card">
+      <span class="auth-badge"><span class="dot"></span> Get started — it's free</span>
+      <h1>Create your account.</h1>
+      <p class="auth-sub">Start tracking sales, stock and cash in minutes.</p>
 
-      <div class="setup-step is-active" id="setup-step-1">
-        <h2>Welcome to BizTrack 👋</h2>
-        <p class="setup-sub">Let's set up your business in a few seconds.</p>
+      <div class="auth-error-banner" id="auth-error-banner"></div>
+
+      <form id="signup-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="name-input">Your name</label>
+          <input type="text" id="name-input" class="form-input" placeholder="Enter your full name" autocomplete="name" />
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="country-select">Country</label>
+            <select id="country-select" class="form-select"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Currency</label>
+            <div class="form-input" id="currency-display" style="display:flex; align-items:center; color: var(--color-text-muted);"></div>
+          </div>
+        </div>
 
         <div class="form-group">
-          <label class="form-label" for="business-name-input">What's your business name?</label>
-          <input type="text" id="business-name-input" class="form-input" placeholder="Enter business name" autocomplete="off" />
-          <div class="form-error" id="business-name-error">Please enter your business name.</div>
+          <label class="form-label" for="email-input">Email address</label>
+          <input type="email" id="email-input" class="form-input" placeholder="Enter your email" autocomplete="email" />
         </div>
 
-        <button class="btn btn-primary btn-block" id="setup-continue-btn">Continue</button>
-      </div>
-
-      <div class="setup-step" id="setup-step-2">
-        <h2>What type of business do you run?</h2>
-        <p class="setup-sub">This helps us tailor your categories.</p>
-
-        <div class="business-type-grid">
-          <div class="business-type-option" data-type="Fashion">Fashion</div>
-          <div class="business-type-option" data-type="Food">Food</div>
-          <div class="business-type-option" data-type="Retail">Retail</div>
-          <div class="business-type-option" data-type="Freelance">Freelance</div>
-          <div class="business-type-option" data-type="Services">Services</div>
-          <div class="business-type-option" data-type="Beauty">Beauty</div>
-          <div class="business-type-option" data-type="Technology">Technology</div>
-          <div class="business-type-option" data-type="Other">Other</div>
+        <div class="form-group">
+          <label class="form-label" for="password-input">Password</label>
+          <input type="password" id="password-input" class="form-input" placeholder="Enter your password" autocomplete="new-password" />
         </div>
 
-        <div class="form-actions">
-          <button class="btn btn-secondary" id="setup-back-btn">Back</button>
-          <button class="btn btn-primary btn-block" id="setup-finish-btn" disabled>Continue</button>
-        </div>
-      </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="terms-checkbox" />
+          <span>I agree to the <a href="#" onclick="return false;">Terms of Use and Privacy Policy</a></span>
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block">Create account →</button>
+      </form>
+
+      <p class="auth-footer-link">Already have an account? <a href="login.html">Sign in</a></p>
     </div>
   </div>
 
   <script src="storage.js"></script>
-  <script src="setup.js"></script>
+  <script src="signup.js"></script>
 </body>
 </html>
