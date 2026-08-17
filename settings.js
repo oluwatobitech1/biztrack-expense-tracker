@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('settings-business-name').value = business.name;
   document.getElementById('settings-business-type').value = business.type;
 
+  const account = getAccount();
+  document.getElementById('account-email-label').textContent = account.email || '';
+
   document.getElementById('save-business-btn').addEventListener('click', () => {
     const name = document.getElementById('settings-business-name').value.trim();
     const type = document.getElementById('settings-business-type').value.trim();
@@ -46,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelBtn: document.getElementById('cancel-clear-btn'),
     onConfirm: () => {
       clearAllData();
-      window.location.href = 'setup.html';
+      window.location.href = 'signup.html';
     }
   });
 
