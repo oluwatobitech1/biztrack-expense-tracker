@@ -9,8 +9,10 @@ const STORAGE_KEY = 'biztrack_data';
 /**
  * Countries BizTrack supports at signup, each mapped to its currency.
  * Selecting a country auto-fills the currency used across the app.
+ * Covers every major region so the app works for any business, anywhere.
  */
 const CURRENCIES = [
+  // Africa
   { country: 'Nigeria', code: 'NGN', symbol: '\u20A6', label: 'Nigerian Naira (\u20A6)' },
   { country: 'Ghana', code: 'GHS', symbol: '\u20B5', label: 'Ghana Cedi (\u20B5)' },
   { country: 'Kenya', code: 'KES', symbol: 'KSh', label: 'Kenyan Shilling (KSh)' },
@@ -19,6 +21,50 @@ const CURRENCIES = [
   { country: 'Tanzania', code: 'TZS', symbol: 'TSh', label: 'Tanzanian Shilling (TSh)' },
   { country: 'Rwanda', code: 'RWF', symbol: 'FRw', label: 'Rwandan Franc (FRw)' },
   { country: 'Egypt', code: 'EGP', symbol: 'E\u00A3', label: 'Egyptian Pound (E\u00A3)' },
+  { country: 'Morocco', code: 'MAD', symbol: 'MAD', label: 'Moroccan Dirham (MAD)' },
+  { country: 'Ethiopia', code: 'ETB', symbol: 'Br', label: 'Ethiopian Birr (Br)' },
+  // North America
+  { country: 'United States', code: 'USD', symbol: '$', label: 'US Dollar ($)' },
+  { country: 'Canada', code: 'CAD', symbol: 'CA$', label: 'Canadian Dollar (CA$)' },
+  { country: 'Mexico', code: 'MXN', symbol: 'MX$', label: 'Mexican Peso (MX$)' },
+  // Europe
+  { country: 'United Kingdom', code: 'GBP', symbol: '\u00A3', label: 'British Pound (\u00A3)' },
+  { country: 'Germany', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'France', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'Spain', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'Italy', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'Netherlands', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'Ireland', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
+  { country: 'Switzerland', code: 'CHF', symbol: 'CHF', label: 'Swiss Franc (CHF)' },
+  { country: 'Sweden', code: 'SEK', symbol: 'kr', label: 'Swedish Krona (kr)' },
+  { country: 'Norway', code: 'NOK', symbol: 'kr', label: 'Norwegian Krone (kr)' },
+  { country: 'Poland', code: 'PLN', symbol: 'z\u0142', label: 'Polish Z\u0142oty (z\u0142)' },
+  { country: 'Turkey', code: 'TRY', symbol: '\u20BA', label: 'Turkish Lira (\u20BA)' },
+  // Asia-Pacific
+  { country: 'India', code: 'INR', symbol: '\u20B9', label: 'Indian Rupee (\u20B9)' },
+  { country: 'China', code: 'CNY', symbol: '\u00A5', label: 'Chinese Yuan (\u00A5)' },
+  { country: 'Japan', code: 'JPY', symbol: '\u00A5', label: 'Japanese Yen (\u00A5)' },
+  { country: 'South Korea', code: 'KRW', symbol: '\u20A9', label: 'South Korean Won (\u20A9)' },
+  { country: 'Singapore', code: 'SGD', symbol: 'S$', label: 'Singapore Dollar (S$)' },
+  { country: 'Indonesia', code: 'IDR', symbol: 'Rp', label: 'Indonesian Rupiah (Rp)' },
+  { country: 'Malaysia', code: 'MYR', symbol: 'RM', label: 'Malaysian Ringgit (RM)' },
+  { country: 'Philippines', code: 'PHP', symbol: '\u20B1', label: 'Philippine Peso (\u20B1)' },
+  { country: 'Vietnam', code: 'VND', symbol: '\u20AB', label: 'Vietnamese Dong (\u20AB)' },
+  { country: 'Pakistan', code: 'PKR', symbol: 'Rs', label: 'Pakistani Rupee (Rs)' },
+  { country: 'Bangladesh', code: 'BDT', symbol: '\u09F3', label: 'Bangladeshi Taka (\u09F3)' },
+  { country: 'Australia', code: 'AUD', symbol: 'A$', label: 'Australian Dollar (A$)' },
+  { country: 'New Zealand', code: 'NZD', symbol: 'NZ$', label: 'New Zealand Dollar (NZ$)' },
+  // Middle East
+  { country: 'United Arab Emirates', code: 'AED', symbol: 'AED', label: 'UAE Dirham (AED)' },
+  { country: 'Saudi Arabia', code: 'SAR', symbol: 'SAR', label: 'Saudi Riyal (SAR)' },
+  { country: 'Qatar', code: 'QAR', symbol: 'QAR', label: 'Qatari Riyal (QAR)' },
+  { country: 'Israel', code: 'ILS', symbol: '\u20AA', label: 'Israeli Shekel (\u20AA)' },
+  // South America
+  { country: 'Brazil', code: 'BRL', symbol: 'R$', label: 'Brazilian Real (R$)' },
+  { country: 'Argentina', code: 'ARS', symbol: 'AR$', label: 'Argentine Peso (AR$)' },
+  { country: 'Colombia', code: 'COP', symbol: 'COL$', label: 'Colombian Peso (COL$)' },
+  { country: 'Chile', code: 'CLP', symbol: 'CL$', label: 'Chilean Peso (CL$)' },
+  // Fallback
   { country: 'Other', code: 'USD', symbol: '$', label: 'US Dollar ($)' }
 ];
 
