@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
@@ -17,7 +17,10 @@
       <span class="brand-mark">B</span>
       <span>BizTrack</span>
     </div>
-    <a href="setup.html" class="btn btn-primary btn-sm">Get Started</a>
+    <div style="display:flex; align-items:center; gap: 16px;">
+      <a href="login.html" style="font-weight:600; font-size:0.9rem; color: var(--color-text-muted);">Sign in</a>
+      <a href="signup.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
   </header>
 
   <section class="hero">
@@ -26,7 +29,7 @@
       <h1>Know where your business money goes.</h1>
       <p class="hero-sub">Track income, expenses and profit from one simple dashboard. No accounting background needed.</p>
       <div class="hero-actions">
-        <a href="setup.html" class="btn btn-primary">Get Started</a>
+        <a href="signup.html" class="btn btn-primary">Get Started</a>
         <a href="dashboard.html" class="btn btn-secondary" id="view-demo-btn">View Demo</a>
       </div>
     </div>
@@ -136,7 +139,7 @@
   <section class="section" style="padding-top: 0;">
     <div class="cta-section">
       <h2>Start tracking your business today.</h2>
-      <a href="setup.html" class="btn btn-primary">Get Started</a>
+      <a href="signup.html" class="btn btn-primary">Get Started</a>
     </div>
   </section>
 
@@ -147,9 +150,18 @@
   <script src="js/storage.js"></script>
   <script>
     document.getElementById('view-demo-btn').addEventListener('click', function (e) {
-      // If no business is set up yet, seed a light demo so the dashboard isn't empty.
-      if (!isSetupComplete()) {
+      // If no account/business is set up yet, seed a light demo so the dashboard isn't empty.
+      if (!isLoggedIn() || !isSetupComplete()) {
         e.preventDefault();
+        if (!isLoggedIn()) {
+          createAccount({
+            name: 'Demo User',
+            email: 'demo@biztrack.app',
+            password: 'demo1234',
+            country: 'Nigeria',
+            currency: 'NGN'
+          });
+        }
         saveBusiness({ name: 'Demo Business', type: 'Retail', currency: 'NGN' });
         const demo = [
           { type: 'income', amount: 50000, description: 'Customer payment', category: 'Sales', paymentMethod: 'Bank Transfer', date: new Date().toISOString().split('T')[0] },
