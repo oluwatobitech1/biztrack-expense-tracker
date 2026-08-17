@@ -7,17 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('settings-business-name').value = business.name;
   document.getElementById('settings-business-type').value = business.type;
 
+  const currencySelect = document.getElementById('settings-currency');
+  const seenCodes = new Set();
+  CURRENCIES.forEach((c) => {
+    if (seenCodes.has(c.code)) return; // avoid duplicate options for shared currencies (e.g. EUR)
+    seenCodes.add(c.code);
+    const opt = document.createElement('option');
+    opt.value = c.code;
+    opt.textContent = c.label;
+    currencySelect.appendChild(opt);
+  });
+  currencySelect.value = business.currency || 'USD';
+
   const account = getAccount();
   document.getElementById('account-email-label').textContent = account.email || '';
 
   document.getElementById('save-business-btn').addEventListener('click', () => {
     const name = document.getElementById('settings-business-name').value.trim();
     const type = document.getElementById('settings-business-type').value.trim();
+    const currency = document.getElementById('settings-currency').value;
     if (!name) {
       showToast('Business name cannot be empty.', 'error');
       return;
     }
-    saveBusiness({ name, type });
+    saveBusiness({ name, type, currency });
     renderBusinessBadge();
     showToast('Business info updated.', 'success');
   });
