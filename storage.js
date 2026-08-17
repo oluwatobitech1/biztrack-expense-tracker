@@ -7,8 +7,26 @@
 const STORAGE_KEY = 'biztrack_data';
 
 /**
+ * Countries BizTrack supports at signup, each mapped to its currency.
+ * Selecting a country auto-fills the currency used across the app.
+ */
+const CURRENCIES = [
+  { country: 'Nigeria', code: 'NGN', symbol: '\u20A6', label: 'Nigerian Naira (\u20A6)' },
+  { country: 'Ghana', code: 'GHS', symbol: '\u20B5', label: 'Ghana Cedi (\u20B5)' },
+  { country: 'Kenya', code: 'KES', symbol: 'KSh', label: 'Kenyan Shilling (KSh)' },
+  { country: 'South Africa', code: 'ZAR', symbol: 'R', label: 'South African Rand (R)' },
+  { country: 'Uganda', code: 'UGX', symbol: 'USh', label: 'Ugandan Shilling (USh)' },
+  { country: 'Tanzania', code: 'TZS', symbol: 'TSh', label: 'Tanzanian Shilling (TSh)' },
+  { country: 'Rwanda', code: 'RWF', symbol: 'FRw', label: 'Rwandan Franc (FRw)' },
+  { country: 'Egypt', code: 'EGP', symbol: 'E\u00A3', label: 'Egyptian Pound (E\u00A3)' },
+  { country: 'Other', code: 'USD', symbol: '$', label: 'US Dollar ($)' }
+];
+
+/**
  * Shape of the data saved under STORAGE_KEY:
  * {
+ *   account: { name, email, passwordHash, country },
+ *   session: { loggedIn },
  *   business: { name, type, currency },
  *   transactions: [ { id, type, amount, description, category, paymentMethod, date, createdAt } ],
  *   settings: { theme }
@@ -17,6 +35,15 @@ const STORAGE_KEY = 'biztrack_data';
 
 function getDefaultData() {
   return {
+    account: {
+      name: '',
+      email: '',
+      passwordHash: '',
+      country: ''
+    },
+    session: {
+      loggedIn: false
+    },
     business: {
       name: '',
       type: '',
@@ -36,6 +63,8 @@ function loadData() {
     const parsed = JSON.parse(raw);
     // Guard against partially-shaped data from older versions.
     return {
+      account: { ...getDefaultData().account, ...(parsed.account || {}) },
+      session: { ...getDefaultData().session, ...(parsed.session || {}) },
       business: { ...getDefaultData().business, ...(parsed.business || {}) },
       transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
       settings: { ...getDefaultData().settings, ...(parsed.settings || {}) }
@@ -54,6 +83,66 @@ function persistData(data) {
     console.error('BizTrack: failed to save data.', err);
     return false;
   }
+}
+
+/* ---------- Account & session ---------- */
+
+/**
+ * Lightweight non-cryptographic hash so we don't store passwords in
+ * plain text. This is a client-only demo (no server), so it's not a
+ * substitute for real password hashing on a backend — good enough to
+ * avoid an obvious plaintext string in localStorage, not for production auth.
+ */
+function simpleHash(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function isAccountCreated() {
+  const data = loadData();
+  return Boolean(data.account.email && data.account.passwordHash);
+}
+
+function getAccount() {
+  return loadData().account;
+}
+
+function createAccount({ name, email, password, country, currency }) {
+  const data = loadData();
+  data.account = {
+    name,
+    email: email.toLowerCase().trim(),
+    passwordHash: simpleHash(password),
+    country
+  };
+  if (currency) data.business.currency = currency;
+  data.session.loggedIn = true;
+  persistData(data);
+  return true;
+}
+
+function login(email, password) {
+  const data = loadData();
+  const normalizedEmail = email.toLowerCase().trim();
+  if (data.account.email === normalizedEmail && data.account.passwordHash === simpleHash(password)) {
+    data.session.loggedIn = true;
+    persistData(data);
+    return true;
+  }
+  return false;
+}
+
+function logout() {
+  const data = loadData();
+  data.session.loggedIn = false;
+  persistData(data);
+}
+
+function isLoggedIn() {
+  return loadData().session.loggedIn;
 }
 
 /* ---------- Business ---------- */
