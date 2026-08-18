@@ -103,15 +103,32 @@
           <div class="card-header">
             <h2 class="section-title">Income vs Expenses</h2>
           </div>
-          <div class="chart-wrap" id="chart-wrap">
-            <canvas id="income-expense-chart"></canvas>
-            <div class="empty-state" id="chart-empty-state" style="display:none;">
-              <div class="empty-state-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
+          <div id="flow-stats-wrap">
+            <div class="dashboard-flow-stats">
+              <div class="dashboard-flow-stat">
+                <div class="label">Income</div>
+                <div class="value" style="color: var(--color-income);" id="flow-income-value">0</div>
               </div>
-              <h3>No financial data yet</h3>
-              <p>Add your first transaction to see your business performance here.</p>
+              <div class="dashboard-flow-stat">
+                <div class="label">Expenses</div>
+                <div class="value" style="color: var(--color-expense);" id="flow-expense-value">0</div>
+              </div>
             </div>
+            <div class="dashboard-flow-bar">
+              <div class="dashboard-flow-bar-income" id="flow-bar-income"></div>
+              <div class="dashboard-flow-bar-expense" id="flow-bar-expense"></div>
+            </div>
+            <div class="flow-bar-legend">
+              <span><span class="legend-dot legend-dot--income"></span> Income</span>
+              <span><span class="legend-dot legend-dot--expense"></span> Expenses</span>
+            </div>
+          </div>
+          <div class="empty-state" id="chart-empty-state" style="display:none;">
+            <div class="empty-state-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
+            </div>
+            <h3>No financial data yet</h3>
+            <p>Add your first transaction to see your business performance here.</p>
           </div>
         </div>
 
@@ -159,7 +176,6 @@
     </a>
   </nav>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
   <script src="storage.js"></script>
   <script src="app.js"></script>
   <script src="dashboard.js"></script>
