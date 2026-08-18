@@ -217,14 +217,9 @@ img {
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: var(--color-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
 }
 
 .sidebar-brand-name {
@@ -1034,12 +1029,9 @@ body.modal-open {
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: var(--color-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
 }
 
 .hero {
@@ -1452,6 +1444,15 @@ body.modal-open {
 /* =========================================================
    Auth (Sign up / Sign in)
    ========================================================= */
+
+.auth-logo {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 18px;
+}
 
 .auth-badge {
   display: inline-flex;
