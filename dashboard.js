@@ -1,5 +1,3 @@
-let dashboardChart = null;
-
 document.addEventListener('DOMContentLoaded', () => {
   requireSetup();
   setGreeting(document.getElementById('greeting-text'));
@@ -27,67 +25,44 @@ function renderDashboard(range) {
   document.getElementById('stat-profit').textContent = formatCurrency(profit);
   document.getElementById('stat-count').textContent = transactions.length;
 
-  renderChart(transactions);
-  renderRecentTransactions();
+  // Each section is independent on purpose: if one throws, the other still renders.
+  try {
+    renderFlowStats(income, expenses);
+  } catch (err) {
+    console.error('BizTrack: failed to render Income vs Expenses.', err);
+  }
+
+  try {
+    renderRecentTransactions();
+  } catch (err) {
+    console.error('BizTrack: failed to render Recent Transactions.', err);
+  }
 }
 
-function renderChart(transactions) {
-  const chartWrap = document.getElementById('chart-wrap');
-  const canvas = document.getElementById('income-expense-chart');
+function renderFlowStats(income, expenses) {
+  const wrap = document.getElementById('flow-stats-wrap');
   const emptyState = document.getElementById('chart-empty-state');
+  const total = income + expenses;
 
-  if (transactions.length === 0) {
-    canvas.style.display = 'none';
+  document.getElementById('flow-income-value').textContent = formatCurrency(income);
+  document.getElementById('flow-expense-value').textContent = formatCurrency(expenses);
+
+  const incomeBar = document.getElementById('flow-bar-income');
+  const expenseBar = document.getElementById('flow-bar-expense');
+
+  if (total === 0) {
+    wrap.style.display = 'none';
     emptyState.style.display = 'block';
-    if (dashboardChart) {
-      dashboardChart.destroy();
-      dashboardChart = null;
-    }
     return;
   }
 
-  canvas.style.display = 'block';
+  wrap.style.display = 'block';
   emptyState.style.display = 'none';
 
-  // Group by day for the selected range so the chart reflects real trend.
-  const byDate = {};
-  transactions.forEach((t) => {
-    const key = t.date;
-    if (!byDate[key]) byDate[key] = { income: 0, expense: 0 };
-    byDate[key][t.type] += Number(t.amount);
-  });
-
-  const sortedDates = Object.keys(byDate).sort((a, b) => new Date(a) - new Date(b));
-  const labels = sortedDates.map((d) => formatDate(d));
-  const incomeData = sortedDates.map((d) => byDate[d].income);
-  const expenseData = sortedDates.map((d) => byDate[d].expense);
-
-  const styles = getComputedStyle(document.documentElement);
-  const incomeColor = styles.getPropertyValue('--color-income').trim();
-  const expenseColor = styles.getPropertyValue('--color-expense').trim();
-
-  if (dashboardChart) dashboardChart.destroy();
-
-  dashboardChart = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        { label: 'Income', data: incomeData, backgroundColor: incomeColor, borderRadius: 6, maxBarThickness: 28 },
-        { label: 'Expenses', data: expenseData, backgroundColor: expenseColor, borderRadius: 6, maxBarThickness: 28 }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 10, usePointStyle: true } }
-      },
-      scales: {
-        y: { beginAtZero: true, ticks: { callback: (v) => formatCurrency(v) } }
-      }
-    }
-  });
+  const incomePct = (income / total) * 100;
+  const expensePct = (expenses / total) * 100;
+  incomeBar.style.width = incomePct + '%';
+  expenseBar.style.width = expensePct + '%';
 }
 
 function renderRecentTransactions() {
