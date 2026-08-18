@@ -88,24 +88,18 @@
       <div class="report-charts-grid">
         <div class="card">
           <div class="card-header"><h2 class="section-title">Income by Category</h2></div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="income-chart"></canvas>
-            <div class="empty-state" id="income-chart-empty" style="display:none; padding: 24px;">
-              <p>No income recorded for this period.</p>
-            </div>
-          </div>
           <div class="breakdown-list" id="income-breakdown-list"></div>
+          <div class="empty-state" id="income-chart-empty" style="display:none; padding: 24px;">
+            <p>No income recorded for this period.</p>
+          </div>
         </div>
 
         <div class="card">
           <div class="card-header"><h2 class="section-title">Expenses by Category</h2></div>
-          <div class="chart-wrap" style="height:220px;">
-            <canvas id="expense-chart"></canvas>
-            <div class="empty-state" id="expense-chart-empty" style="display:none; padding: 24px;">
-              <p>No expenses recorded for this period.</p>
-            </div>
-          </div>
           <div class="breakdown-list" id="expense-breakdown-list"></div>
+          <div class="empty-state" id="expense-chart-empty" style="display:none; padding: 24px;">
+            <p>No expenses recorded for this period.</p>
+          </div>
         </div>
       </div>
     </main>
@@ -136,7 +130,6 @@
     </a>
   </nav>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
   <script src="storage.js"></script>
   <script src="app.js"></script>
   <script src="reports.js"></script>
