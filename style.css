@@ -450,6 +450,57 @@ img {
   height: 260px;
 }
 
+.dashboard-flow-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.dashboard-flow-stat {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.dashboard-flow-stat .label {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.dashboard-flow-stat .value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-top: 6px;
+}
+
+.dashboard-flow-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.dashboard-flow-bar-income {
+  background: var(--color-income);
+  height: 100%;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+.dashboard-flow-bar-expense {
+  background: var(--color-expense);
+  height: 100%;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
 /* ---------- Transaction list ---------- */
 
 .txn-list {
