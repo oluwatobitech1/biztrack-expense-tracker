@@ -1,0 +1,10 @@
+{
+  "name": "BizTrack",
+  "short_name": "BizTrack",
+  "description": "Track income, expenses and profit from one simple dashboard.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1B5E42",
+  "icons": []
+}
