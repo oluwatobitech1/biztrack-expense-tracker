@@ -35,6 +35,11 @@
           <input type="text" id="name-input" class="form-input" placeholder="Enter your full name" data-i18n-placeholder="auth.namePlaceholder" autocomplete="name" />
         </div>
 
+        <div class="form-group">
+          <label class="form-label" for="username-input" data-i18n="auth.usernameLabel">Username</label>
+          <input type="text" id="username-input" class="form-input" placeholder="Choose a username" data-i18n-placeholder="auth.usernamePlaceholder" autocomplete="username" />
+        </div>
+
         <div class="form-row-2">
           <div class="form-group">
             <label class="form-label" for="country-select" data-i18n="auth.countryLabel">Country</label>
@@ -61,7 +66,7 @@
           <span><span data-i18n="auth.termsAgreePrefix">I agree to the</span> <a href="#" onclick="return false;" data-i18n="auth.termsLink">Terms of Use and Privacy Policy</a></span>
         </label>
 
-        <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.createAccountBtn">Create account →</button>
+        <button type="submit" class="btn btn-primary btn-block" id="signup-submit-btn" data-i18n="auth.createAccountBtn">Create account →</button>
       </form>
 
       <p class="auth-footer-link"><span data-i18n="auth.haveAccount">Already have an account?</span> <a href="login.html" data-i18n="nav.signIn">Sign in</a></p>
@@ -69,6 +74,7 @@
   </div>
 
   <script src="storage.js"></script>
+  <script src="app.js"></script>
   <script src="i18n.js"></script>
   <script src="signup.js"></script>
   <script>
