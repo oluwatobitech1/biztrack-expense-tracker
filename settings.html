@@ -69,6 +69,19 @@
 
       <div class="card settings-section" style="max-width: 560px;">
         <h2>Business Info</h2>
+
+        <div class="form-group">
+          <label class="form-label">Business logo</label>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div id="settings-logo-preview" style="width:56px; height:56px; border-radius:50%; background: var(--color-primary-light); color: var(--color-primary); display:flex; align-items:center; justify-content:center; font-weight:700; overflow:hidden; flex-shrink:0;">B</div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-secondary btn-sm" id="settings-logo-btn">Change logo</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="settings-logo-remove-btn">Remove</button>
+              <input type="file" id="settings-logo-input" accept="image/*" style="display:none;" />
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="form-label" for="settings-business-name">Business Name</label>
           <input type="text" id="settings-business-name" class="form-input" />
@@ -191,5 +204,46 @@
   <script src="assistant.js"></script>
   <script src="settings.js"></script>
   <script src="install.js"></script>
+  <script>
+    (function () {
+      const logoInput = document.getElementById('settings-logo-input');
+      const logoBtn = document.getElementById('settings-logo-btn');
+      const removeBtn = document.getElementById('settings-logo-remove-btn');
+      const logoPreview = document.getElementById('settings-logo-preview');
+
+      function renderPreview() {
+        const business = getBusiness();
+        if (business.logo) {
+          logoPreview.style.background = 'transparent';
+          logoPreview.innerHTML = '<img src="' + business.logo + '" alt="Logo preview" style="width:100%; height:100%; object-fit:cover;" />';
+        } else {
+          logoPreview.style.background = '';
+          logoPreview.innerHTML = '';
+          logoPreview.textContent = (business.name || 'B').charAt(0).toUpperCase();
+        }
+      }
+      renderPreview();
+
+      logoBtn.addEventListener('click', function () { logoInput.click(); });
+
+      logoInput.addEventListener('change', function () {
+        const file = logoInput.files[0];
+        if (!file) return;
+        resizeImageFile(file, 240, function (dataUrl) {
+          saveBusiness({ logo: dataUrl });
+          renderPreview();
+          renderBusinessBadge();
+          showToast('Logo updated');
+        });
+      });
+
+      removeBtn.addEventListener('click', function () {
+        saveBusiness({ logo: null });
+        renderPreview();
+        renderBusinessBadge();
+        showToast('Logo removed');
+      });
+    })();
+  </script>
 </body>
 </html>
