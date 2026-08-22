@@ -48,6 +48,17 @@
           <div class="business-type-option" data-type="Freelance">Freelance / Other</div>
         </div>
 
+        <div class="form-group" style="margin-top: 20px;">
+          <label class="form-label">Business logo (optional)</label>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div id="setup-logo-preview" style="width:56px; height:56px; border-radius:50%; background: var(--color-primary-light); color: var(--color-primary); display:flex; align-items:center; justify-content:center; font-weight:700; overflow:hidden; flex-shrink:0;">+</div>
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm" id="setup-logo-btn">Upload logo</button>
+              <input type="file" id="setup-logo-input" accept="image/*" style="display:none;" />
+            </div>
+          </div>
+        </div>
+
         <div style="display:flex; gap: 10px;">
           <button type="button" class="btn btn-secondary" id="setup-back-btn">Back</button>
           <button type="button" class="btn btn-primary btn-block" id="setup-finish-btn" disabled>Finish setup</button>
@@ -57,6 +68,31 @@
   </div>
 
   <script src="storage.js"></script>
+  <script src="app.js"></script>
   <script src="setup.js"></script>
+  <script>
+    (function () {
+      const logoInput = document.getElementById('setup-logo-input');
+      const logoBtn = document.getElementById('setup-logo-btn');
+      const logoPreview = document.getElementById('setup-logo-preview');
+
+      // Reflect any logo saved earlier in this session (e.g. user went back and forth).
+      const existing = getBusiness().logo;
+      if (existing) {
+        logoPreview.innerHTML = '<img src="' + existing + '" alt="Logo preview" style="width:100%; height:100%; object-fit:cover;" />';
+      }
+
+      logoBtn.addEventListener('click', function () { logoInput.click(); });
+
+      logoInput.addEventListener('change', function () {
+        const file = logoInput.files[0];
+        if (!file) return;
+        resizeImageFile(file, 240, function (dataUrl) {
+          logoPreview.innerHTML = '<img src="' + dataUrl + '" alt="Logo preview" style="width:100%; height:100%; object-fit:cover;" />';
+          saveBusiness({ logo: dataUrl });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
