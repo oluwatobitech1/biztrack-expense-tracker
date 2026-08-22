@@ -93,7 +93,8 @@ function getDefaultData() {
     business: {
       name: '',
       type: '',
-      currency: 'NGN'
+      currency: 'NGN',
+      logo: null
     },
     transactions: [],
     settings: {
