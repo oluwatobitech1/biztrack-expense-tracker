@@ -19,6 +19,9 @@
 
   <div class="setup-shell">
     <div class="card setup-card">
+      <div style="display:flex; justify-content:flex-end;">
+        <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
+      </div>
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
       <div class="setup-progress">
         <div class="setup-progress-dot" id="progress-dot-1"></div>
@@ -26,49 +29,50 @@
       </div>
 
       <div class="setup-step is-active" id="setup-step-1">
-        <h2>What's your business called?</h2>
-        <p class="setup-sub">This is how it'll show up across your dashboard.</p>
+        <h2 data-i18n="setup.step1Title">What's your business called?</h2>
+        <p class="setup-sub" data-i18n="setup.step1Sub">This is how it'll show up across your dashboard.</p>
 
         <div class="form-group">
-          <label class="form-label" for="business-name-input">Business name</label>
-          <input type="text" id="business-name-input" class="form-input" placeholder="e.g. Tobi Fashion" autocomplete="organization" />
+          <label class="form-label" for="business-name-input" data-i18n="setup.businessNameLabel">Business name</label>
+          <input type="text" id="business-name-input" class="form-input" placeholder="e.g. Tobi Fashion" data-i18n-placeholder="setup.businessNamePlaceholder" autocomplete="organization" />
           <span class="form-error" id="business-name-error"></span>
         </div>
 
-        <button type="button" class="btn btn-primary btn-block" id="setup-continue-btn">Continue →</button>
+        <button type="button" class="btn btn-primary btn-block" id="setup-continue-btn" data-i18n="setup.continueBtn">Continue →</button>
       </div>
 
       <div class="setup-step" id="setup-step-2">
-        <h2>What kind of business is it?</h2>
-        <p class="setup-sub">We'll tailor your categories to match.</p>
+        <h2 data-i18n="setup.step2Title">What kind of business is it?</h2>
+        <p class="setup-sub" data-i18n="setup.step2Sub">We'll tailor your categories to match.</p>
 
         <div class="business-type-grid">
-          <div class="business-type-option" data-type="Retail">Retail</div>
-          <div class="business-type-option" data-type="Service">Service</div>
-          <div class="business-type-option" data-type="Food & Drink">Food & Drink</div>
-          <div class="business-type-option" data-type="Freelance">Freelance / Other</div>
+          <div class="business-type-option" data-type="Retail" data-i18n="setup.typeRetail">Retail</div>
+          <div class="business-type-option" data-type="Service" data-i18n="setup.typeService">Service</div>
+          <div class="business-type-option" data-type="Food & Drink" data-i18n="setup.typeFood">Food & Drink</div>
+          <div class="business-type-option" data-type="Freelance" data-i18n="setup.typeFreelance">Freelance / Other</div>
         </div>
 
         <div class="form-group" style="margin-top: 20px;">
-          <label class="form-label">Business logo (optional)</label>
+          <label class="form-label" data-i18n="setup.logoLabel">Business logo (optional)</label>
           <div style="display:flex; align-items:center; gap:14px;">
             <div id="setup-logo-preview" style="width:56px; height:56px; border-radius:50%; background: var(--color-primary-light); color: var(--color-primary); display:flex; align-items:center; justify-content:center; font-weight:700; overflow:hidden; flex-shrink:0;">+</div>
             <div>
-              <button type="button" class="btn btn-secondary btn-sm" id="setup-logo-btn">Upload logo</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="setup-logo-btn" data-i18n="setup.uploadLogoBtn">Upload logo</button>
               <input type="file" id="setup-logo-input" accept="image/*" style="display:none;" />
             </div>
           </div>
         </div>
 
         <div style="display:flex; gap: 10px;">
-          <button type="button" class="btn btn-secondary" id="setup-back-btn">Back</button>
-          <button type="button" class="btn btn-primary btn-block" id="setup-finish-btn" disabled>Finish setup</button>
+          <button type="button" class="btn btn-secondary" id="setup-back-btn" data-i18n="setup.backBtn">Back</button>
+          <button type="button" class="btn btn-primary btn-block" id="setup-finish-btn" disabled data-i18n="setup.finishBtn">Finish setup</button>
         </div>
       </div>
     </div>
   </div>
 
   <script src="storage.js"></script>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
   <script src="setup.js"></script>
   <script>
