@@ -37,16 +37,19 @@ function handleSignup(e) {
   e.preventDefault();
 
   const nameInput = document.getElementById('name-input');
+  const usernameInput = document.getElementById('username-input');
   const emailInput = document.getElementById('email-input');
   const passwordInput = document.getElementById('password-input');
   const termsCheckbox = document.getElementById('terms-checkbox');
   const countrySelect = document.getElementById('country-select');
   const errorBanner = document.getElementById('auth-error-banner');
+  const submitBtn = document.getElementById('signup-submit-btn');
 
-  [nameInput, emailInput, passwordInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
+  [nameInput, usernameInput, emailInput, passwordInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
   errorBanner.classList.remove('is-visible');
 
   const name = nameInput.value.trim();
+  const username = usernameInput.value.trim();
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
@@ -56,6 +59,14 @@ function handleSignup(e) {
   if (!name) {
     nameInput.classList.add('is-invalid');
     message = 'Please enter your full name.';
+    hasError = true;
+  } else if (!username || !isValidUsername(username)) {
+    usernameInput.classList.add('is-invalid');
+    message = 'Username must be at least 3 characters, using only letters, numbers, underscores, or periods.';
+    hasError = true;
+  } else if (isUsernameTaken(username)) {
+    usernameInput.classList.add('is-invalid');
+    message = 'That username is already taken. Try another.';
     hasError = true;
   } else if (!countrySelect.value) {
     countrySelect.classList.add('is-invalid');
@@ -82,8 +93,11 @@ function handleSignup(e) {
 
   const match = CURRENCIES.find((c) => c.country === countrySelect.value);
 
+  setButtonLoading(submitBtn, true);
+
   createAccount({
     name,
+    username,
     email,
     password,
     country: countrySelect.value,
@@ -91,6 +105,10 @@ function handleSignup(e) {
   });
 
   window.location.href = 'setup.html';
+}
+
+function isValidUsername(username) {
+  return /^[a-zA-Z0-9_.]{3,}$/.test(username);
 }
 
 function isValidEmail(email) {
