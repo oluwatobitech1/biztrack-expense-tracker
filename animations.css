@@ -142,6 +142,23 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Waving hand on the assistant's opening greeting */
+.btai-wave-emoji {
+  display: inline-block;
+  transform-origin: 70% 70%;
+  animation: btai-wave 1.6s ease-in-out 1;
+}
+
+@keyframes btai-wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+
 /* ---------- Stat value count-up target (JS toggles this while animating) ---------- */
 
 .anim-counting {
