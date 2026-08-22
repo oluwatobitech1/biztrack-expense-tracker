@@ -1762,58 +1762,6 @@ body.modal-open {
    Reports page
    ========================================================= */
 
-.reports-banner {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-bottom: 24px;
-  background-image: url('reports-banner.jpg');
-  background-size: cover;
-  background-position: center 30%;
-  min-height: 180px;
-}
-
-.reports-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, rgba(9, 20, 16, 0.88) 0%, rgba(9, 20, 16, 0.72) 45%, rgba(9, 20, 16, 0.4) 100%);
-}
-
-.reports-banner-content {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 36px);
-  min-height: 180px;
-}
-
-.reports-banner-content h1 {
-  color: #fff;
-}
-
-.reports-banner-content .page-subtitle {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.reports-banner-content .btn-secondary {
-  background: rgba(255, 255, 255, 0.95);
-  border: none;
-}
-
-@media (max-width: 560px) {
-  .reports-banner-content {
-    flex-direction: column;
-  }
-
-  .reports-banner-content .btn-secondary {
-    width: 100%;
-  }
-}
-
 .report-summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
