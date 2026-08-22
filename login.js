@@ -16,28 +16,32 @@ document.addEventListener('DOMContentLoaded', () => {
 function handleLogin(e) {
   e.preventDefault();
 
-  const emailInput = document.getElementById('login-email-input');
+  const usernameInput = document.getElementById('login-username-input');
   const passwordInput = document.getElementById('login-password-input');
   const errorBanner = document.getElementById('login-error-banner');
+  const submitBtn = document.getElementById('login-submit-btn');
 
-  [emailInput, passwordInput].forEach((el) => el.classList.remove('is-invalid'));
+  [usernameInput, passwordInput].forEach((el) => el.classList.remove('is-invalid'));
   errorBanner.classList.remove('is-visible');
 
-  const email = emailInput.value.trim();
+  const username = usernameInput.value.trim();
   const password = passwordInput.value;
 
-  if (!email || !password) {
-    errorBanner.textContent = 'Please enter your email and password.';
+  if (!username || !password) {
+    errorBanner.textContent = 'Please enter your username and password.';
     errorBanner.classList.add('is-visible');
     return;
   }
 
-  const success = login(email, password);
+  setButtonLoading(submitBtn, true);
+
+  const success = login(username, password);
 
   if (!success) {
-    errorBanner.textContent = 'Incorrect email or password.';
+    setButtonLoading(submitBtn, false);
+    errorBanner.textContent = 'Incorrect username or password.';
     errorBanner.classList.add('is-visible');
-    emailInput.classList.add('is-invalid');
+    usernameInput.classList.add('is-invalid');
     passwordInput.classList.add('is-invalid');
     return;
   }
