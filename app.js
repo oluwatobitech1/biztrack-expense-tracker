@@ -1,7 +1,8 @@
 /**
  * app.js
  * Shared helpers used across every page: currency formatting, theme
- * application, active-nav highlighting, and page guards.
+ * application, active-nav highlighting, page guards, page-transition
+ * navigation, and page guards.
  */
 
 function formatCurrency(amount) {
@@ -143,8 +144,41 @@ function showToast(message, variant = 'success') {
 
   setTimeout(() => {
     toast.classList.remove('is-visible');
-    setTimeout(() => toast.remove(), 250);
+    setTimeout(() => toast.remove(), 320); // matches .toast transition duration in animations.css
   }, 3000);
+}
+
+/**
+ * Fills a container with shimmering skeleton rows while real data is
+ * being prepared, e.g.:
+ *   showSkeleton(document.getElementById('recent-txn-list'), 3);
+ *   const data = getTransactions();
+ *   clearSkeleton(recentTxnListEl);
+ *   renderTransactions(data); // your normal render call
+ * Safe to call even when the "loading" is effectively instant (a
+ * localStorage read) — swap it in anywhere a render might grow slow
+ * later (e.g. once real API calls are involved).
+ */
+function showSkeleton(container, count = 3) {
+  if (!container) return;
+  container.innerHTML = '';
+  container.classList.add('is-skeleton-loading');
+  for (let i = 0; i < count; i++) {
+    const row = document.createElement('div');
+    row.className = 'skeleton-row';
+    row.innerHTML = `
+      <span class="skeleton skeleton-circle"></span>
+      <span class="skeleton skeleton-text"></span>
+      <span class="skeleton skeleton-text skeleton-text--sm"></span>
+    `;
+    container.appendChild(row);
+  }
+}
+
+function clearSkeleton(container) {
+  if (!container) return;
+  container.classList.remove('is-skeleton-loading');
+  container.innerHTML = '';
 }
 
 /** Wire up a confirm modal. Returns a function you can call to open it. */
@@ -171,6 +205,74 @@ function createConfirmModal({ modalEl, confirmBtn, cancelBtn, onConfirm }) {
   return { open, close };
 }
 
+/**
+ * Toggle a button into/out of a loading state (spinner replaces the
+ * label, button disabled) — pairs with the .btn.is-loading CSS in
+ * animations.css. Use around async/slow actions, e.g.:
+ *   setButtonLoading(submitBtn, true);
+ *   ...do the work...
+ *   setButtonLoading(submitBtn, false);
+ */
+function setButtonLoading(btn, isLoading) {
+  if (!btn) return;
+  if (isLoading) {
+    btn.dataset.wasDisabled = btn.disabled ? '1' : '0';
+    btn.disabled = true;
+    btn.classList.add('is-loading');
+  } else {
+    btn.disabled = btn.dataset.wasDisabled === '1';
+    delete btn.dataset.wasDisabled;
+    btn.classList.remove('is-loading');
+  }
+}
+
+/**
+ * Intercepts clicks on same-page internal links (sidebar nav, mobile
+ * nav, "Add Transaction", "View All Transactions", etc.), fades the
+ * page out, then navigates — so moving between Dashboard/Transactions/
+ * Reports/Settings reads as a transition instead of a hard page cut.
+ * Leaves external links, new-tab links, mailto/tel, downloads, and
+ * same-page anchors untouched.
+ */
+function initPageTransitions() {
+  const EXIT_DURATION = 160;
+
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    if (link.hasAttribute('download')) return;
+    if (link.target && link.target !== '_self') return;
+
+    let url;
+    try {
+      url = new URL(href, window.location.href);
+    } catch (err) {
+      return;
+    }
+    if (url.origin !== window.location.origin) return;
+    if (url.pathname === window.location.pathname && url.hash) return;
+
+    e.preventDefault();
+    document.body.classList.add('is-leaving');
+    setTimeout(() => {
+      window.location.href = href;
+    }, EXIT_DURATION);
+  });
+
+  // If the page is restored from the back/forward cache mid-transition
+  // (or the user hits Back right after leaving), make sure it isn't
+  // stuck faded out.
+  window.addEventListener('pageshow', () => {
+    document.body.classList.remove('is-leaving');
+  });
+}
+
 // Apply theme as early as possible on every page to avoid a flash.
 applyTheme();
 
@@ -187,4 +289,5 @@ document.addEventListener('DOMContentLoaded', () => {
   highlightActiveNav();
   renderBusinessBadge();
   wireLogoutButtons();
+  initPageTransitions();
 });
