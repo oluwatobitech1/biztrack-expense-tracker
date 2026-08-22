@@ -9,6 +9,7 @@
 :root {
   --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --anim-duration: 0.55s;
+  --page-exit-duration: 160ms;
 }
 
 /* Respect users who've asked for reduced motion. */
@@ -21,7 +22,7 @@
   }
 }
 
-/* ---------- Whole-page settle-in ---------- */
+/* ---------- Whole-page settle-in / leave (driven by animate.js nav intercept) ---------- */
 
 body {
   animation: btai-page-in 0.35s ease both;
@@ -30,6 +31,20 @@ body {
 @keyframes btai-page-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Applied just before we navigate to a new internal page, so the
+   swap reads as a transition instead of a hard cut. Removed again
+   on pageshow (see animate.js) in case the page is restored from
+   the back/forward cache with the class still attached. */
+body.is-leaving {
+  animation: btai-page-out var(--page-exit-duration) ease forwards;
+  pointer-events: none;
+}
+
+@keyframes btai-page-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* ---------- Scroll/entrance reveal (driven by animate.js) ---------- */
@@ -53,7 +68,8 @@ body {
 .feature-card,
 .step-card,
 .stat-card {
-  transition: transform 220ms var(--anim-ease), box-shadow 220ms var(--anim-ease);
+  transition: transform 220ms var(--anim-ease), box-shadow 220ms var(--anim-ease),
+              background-color 400ms ease, border-color 400ms ease;
 }
 
 .feature-card:hover,
@@ -163,4 +179,282 @@ body {
 
 .anim-counting {
   font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================
+   Button micro-interactions
+   ========================================================== */
+
+.btn {
+  transition: transform 180ms var(--anim-ease), background var(--transition, 160ms ease),
+              box-shadow 180ms var(--anim-ease), opacity 180ms var(--anim-ease);
+}
+
+.btn-primary:hover,
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(18, 61, 43, 0.18);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(18, 61, 43, 0.08);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: none;
+}
+
+.icon-btn,
+.chip,
+.category-option,
+.type-toggle-btn,
+.business-type-option {
+  transition: all 160ms var(--anim-ease);
+}
+
+.icon-btn:active,
+.chip:active,
+.category-option:active,
+.type-toggle-btn:active,
+.business-type-option:active {
+  transform: scale(0.95);
+}
+
+/* Opt-in loading state — toggle with setButtonLoading(btn, true/false)
+   from app.js on any form submit button. */
+.btn.is-loading {
+  color: transparent !important;
+  pointer-events: none;
+  position: relative;
+}
+
+.btn.is-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: btai-spin 0.65s linear infinite;
+}
+
+.btn-secondary.is-loading::after,
+.btn-ghost.is-loading::after {
+  border-color: rgba(27, 94, 66, 0.25);
+  border-top-color: var(--color-primary);
+}
+
+@keyframes btai-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================
+   Chart / bar draw-in (dashboard income-vs-expense bar +
+   reports category breakdown bars). The width itself is set by
+   dashboard.js / reports.js as usual — this just makes any width
+   change animate instead of snapping.
+   ========================================================== */
+
+.dashboard-flow-bar-income,
+.dashboard-flow-bar-expense {
+  transition: width 700ms var(--anim-ease);
+}
+
+.breakdown-row .breakdown-bar-fill {
+  width: 0%;
+  transition: width 700ms var(--anim-ease);
+}
+
+/* ==========================================================
+   Modal — smooth scale + fade
+   ========================================================== */
+
+.modal-overlay {
+  transition: opacity 220ms var(--anim-ease);
+}
+
+.modal-box {
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition: transform 260ms var(--anim-ease), opacity 220ms var(--anim-ease);
+}
+
+.modal-overlay.is-open .modal-box {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ==========================================================
+   Mobile bottom nav — slide up on first paint, since it takes
+   the sidebar's place as primary nav on small screens.
+   ========================================================== */
+
+@media (max-width: 900px) {
+  .mobile-nav {
+    animation: btai-mobilenav-in 320ms var(--anim-ease) both;
+  }
+
+  @keyframes btai-mobilenav-in {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+}
+
+/* ==========================================================
+   Toasts — slide + settle in, matched to the removal delay in
+   showToast() (app.js) so the exit isn't cut short.
+   ========================================================== */
+
+.toast {
+  transform: translateY(16px) scale(0.97);
+  transition: transform 320ms var(--anim-ease), opacity 320ms var(--anim-ease);
+}
+
+.toast.is-visible {
+  transform: translateY(0) scale(1);
+}
+
+/* ==========================================================
+   Skeleton loading — pair with showSkeleton()/clearSkeleton()
+   in app.js. Drop a container's id/selector into showSkeleton()
+   before a slow render, e.g. showSkeleton(listEl, 4).
+   ========================================================== */
+
+.skeleton {
+  display: block;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-bg) 37%, var(--color-border) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--radius-sm);
+  animation: btai-shimmer 1.4s ease infinite;
+}
+
+@keyframes btai-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 4px;
+}
+
+.skeleton-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-text {
+  height: 14px;
+  flex: 1;
+  border-radius: 4px;
+}
+
+.skeleton-text--sm {
+  flex: none;
+  width: 60px;
+}
+
+.skeleton-block {
+  height: 100%;
+  min-height: 120px;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+/* ==========================================================
+   Empty states — fade/settle in whenever a page-specific
+   script flips them to display:block/flex (a CSS animation
+   restarts on display change, no JS hook needed).
+   ========================================================== */
+
+.empty-state {
+  animation: btai-empty-in 450ms var(--anim-ease) both;
+}
+
+@keyframes btai-empty-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.empty-state-icon {
+  animation: btai-float 4.5s ease-in-out infinite;
+}
+
+/* ==========================================================
+   Theme switch — smooth handoff between light/dark rather
+   than an instant snap. Broad but scoped to color properties
+   only, so layout/animation transitions above are untouched.
+   ========================================================== */
+
+.sidebar,
+.modal-box,
+.modal-overlay,
+.form-input,
+.form-select,
+.toast,
+.stat-icon,
+.txn-icon,
+.dashboard-flow-stat,
+.settings-logo-preview,
+.mobile-nav,
+.auth-error-banner {
+  transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease, box-shadow 400ms ease;
+}
+
+/* ==========================================================
+   Ambient background — two very soft, slow-drifting blurred
+   blobs behind the app shell. Uses the existing light theme
+   tint tokens so it stays subtle in both light and dark mode,
+   and freezes (via the prefers-reduced-motion rule up top)
+   for anyone who's asked for less motion.
+   ========================================================== */
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
+}
+
+body::before {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  right: -100px;
+  background: radial-gradient(circle, var(--color-primary-light), transparent 70%);
+  animation: btai-blob-a 22s ease-in-out infinite;
+}
+
+body::after {
+  width: 380px;
+  height: 380px;
+  bottom: -140px;
+  left: -80px;
+  background: radial-gradient(circle, var(--color-profit-bg), transparent 70%);
+  animation: btai-blob-b 26s ease-in-out infinite;
+}
+
+@keyframes btai-blob-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-30px, 40px) scale(1.08); }
+}
+
+@keyframes btai-blob-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -30px) scale(1.05); }
 }
