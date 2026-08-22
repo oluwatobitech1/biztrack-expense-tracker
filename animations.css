@@ -390,6 +390,10 @@ body.is-leaving {
   animation: btai-float 4.5s ease-in-out infinite;
 }
 
+.auth-error-banner.is-visible {
+  animation: btai-empty-in 320ms var(--anim-ease) both;
+}
+
 /* ==========================================================
    Theme switch — smooth handoff between light/dark rather
    than an instant snap. Broad but scoped to color properties
