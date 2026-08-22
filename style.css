@@ -999,6 +999,47 @@ body.modal-open {
   .stat-value {
     font-size: 1.25rem;
   }
+
+  .card,
+  .setup-card,
+  .auth-card {
+    padding: 22px 18px;
+  }
+
+  .business-type-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-preview-stats {
+    gap: 8px;
+  }
+
+  .hero-preview-stat {
+    padding: 10px;
+  }
+
+  .hero-preview-stat .value {
+    font-size: 0.95rem;
+  }
+
+  .feature-card {
+    padding: 14px;
+  }
+
+  .cta-section {
+    padding: 40px 22px;
+  }
+
+  .report-summary-grid .stat-card,
+  .settings-row {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .modal-box,
+  .install-modal-box {
+    max-width: calc(100vw - 32px);
+  }
 }
 
 /* =========================================================
@@ -1334,6 +1375,59 @@ body.modal-open {
   .steps-grid,
   .features-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-header {
+    padding: 14px 20px;
+  }
+
+  .landing-header > div:last-child {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .landing-header [data-language-switcher] {
+    font-size: 0.75rem;
+    padding: 5px 6px;
+  }
+
+  .btn-install-nav span {
+    display: none;
+  }
+
+  .btn-install-nav {
+    padding: 8px 10px;
+  }
+
+  .hero {
+    padding-top: 24px;
+    gap: 32px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .hero-preview {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .landing-header .brand span {
+    font-size: 1rem;
+  }
+
+  .landing-header > div:last-child a[href="login.html"] {
+    display: none;
   }
 }
 
