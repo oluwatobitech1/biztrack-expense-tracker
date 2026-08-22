@@ -1,0 +1,149 @@
+/**
+ * animations.css
+ * Subtle, professional motion layer for BizTrack. Loaded after
+ * style.css so it can add entrance/hover motion without touching
+ * the base styles. Reuses the existing --transition variable where
+ * it makes sense, and adds its own easing for larger entrance moves.
+ */
+
+:root {
+  --anim-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --anim-duration: 0.55s;
+}
+
+/* Respect users who've asked for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Whole-page settle-in ---------- */
+
+body {
+  animation: btai-page-in 0.35s ease both;
+}
+
+@keyframes btai-page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Scroll/entrance reveal (driven by animate.js) ---------- */
+
+.anim-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--anim-duration) var(--anim-ease),
+              transform var(--anim-duration) var(--anim-ease);
+  will-change: opacity, transform;
+}
+
+.anim-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Card & interactive hover lift ---------- */
+
+.card,
+.feature-card,
+.step-card,
+.stat-card {
+  transition: transform 220ms var(--anim-ease), box-shadow 220ms var(--anim-ease);
+}
+
+.feature-card:hover,
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-modal, 0 12px 28px rgba(0,0,0,0.12));
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Nav links: smooth background/left-accent feel on hover + active */
+.sidebar-nav a {
+  transition: background var(--transition, 160ms ease), color var(--transition, 160ms ease), transform 160ms var(--anim-ease);
+}
+
+.sidebar-nav a:hover {
+  transform: translateX(2px);
+}
+
+/* Transaction/breakdown list rows: gentle stagger + hover highlight */
+#recent-txn-list > *,
+#full-txn-list > *,
+#income-breakdown-list > *,
+#expense-breakdown-list > * {
+  transition: background 160ms ease, transform 160ms var(--anim-ease);
+}
+
+#recent-txn-list > *:hover,
+#full-txn-list > *:hover {
+  transform: translateX(2px);
+}
+
+/* ---------- Landing page hero ---------- */
+
+.hero-preview {
+  animation: btai-float 5s ease-in-out infinite;
+}
+
+@keyframes btai-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.landing-header .brand-mark,
+.sidebar-brand-mark {
+  transition: transform 220ms var(--anim-ease);
+}
+
+.landing-header .brand:hover .brand-mark {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+/* ---------- Chat assistant FAB ---------- */
+
+#biztrack-assistant-fab {
+  animation: btai-fab-in 0.4s var(--anim-ease) both;
+}
+
+@keyframes btai-fab-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+#biztrack-assistant-panel {
+  transform: translateY(12px) scale(0.98);
+  opacity: 0;
+  transition: transform 220ms var(--anim-ease), opacity 220ms var(--anim-ease);
+  pointer-events: none;
+}
+
+#biztrack-assistant-panel.is-open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Chat bubbles ease in as they're added */
+.btai-msg {
+  animation: btai-msg-in 220ms var(--anim-ease) both;
+}
+
+@keyframes btai-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Stat value count-up target (JS toggles this while animating) ---------- */
+
+.anim-counting {
+  font-variant-numeric: tabular-nums;
+}
