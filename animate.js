@@ -135,36 +135,30 @@
     if (!el) return;
 
     var lastKnown = el.textContent; // the last value WE consider "settled"
-    var isAnimating = false;
-    var pendingText = null; // a newer target that arrived mid-animation
 
-    function runAnimation(toText) {
-      isAnimating = true;
+    var observer = new MutationObserver(function () {
+      var toText = el.textContent;
+      if (toText === lastKnown) return;
+      startAnimation(toText);
+    });
+
+    function startAnimation(toText) {
       lastKnown = toText;
+      // Stop watching entirely while we animate, so our own frame-by-frame
+      // writes can never be mistaken for a fresh external change — that
+      // feedback loop was why it never stopped before.
+      observer.disconnect();
       animateCountUp(el, toText, function () {
-        isAnimating = false;
-        if (pendingText !== null && pendingText !== lastKnown) {
-          var next = pendingText;
-          pendingText = null;
-          runAnimation(next);
-        } else {
-          pendingText = null;
+        observer.observe(el, { childList: true, characterData: true, subtree: true });
+        // Catch (once) any real change that happened while we weren't
+        // watching — e.g. clicking another filter chip mid-animation.
+        var current = el.textContent;
+        if (current !== lastKnown) {
+          startAnimation(current);
         }
       });
     }
 
-    var observer = new MutationObserver(function () {
-      var toText = el.textContent;
-      // Our own final write echoes back here — since it matches what we
-      // already consider settled, this is where the old version looped
-      // forever. Ignoring a no-op change is what makes it actually stop.
-      if (toText === lastKnown) return;
-      if (isAnimating) {
-        pendingText = toText;
-        return;
-      }
-      runAnimation(toText);
-    });
     observer.observe(el, { childList: true, characterData: true, subtree: true });
   }
 
