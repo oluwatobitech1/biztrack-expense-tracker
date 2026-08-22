@@ -67,9 +67,21 @@
       .btai-send-btn { background: var(--color-primary, #1B5E42); color: #fff; border: none; border-radius: 10px; width: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
       .btai-send-btn svg { width: 16px; height: 16px; }
 
-      @media (max-width: 480px) {
-        #biztrack-assistant-panel { right: 16px; left: 16px; width: auto; bottom: 84px; }
-        #biztrack-assistant-fab { right: 16px; bottom: 16px; }
+      @media (max-width: 900px) {
+        /* Your .mobile-nav bar takes over the bottom of the screen at this
+           same breakpoint — push the widget up above it instead of
+           overlapping it (which was blocking taps on the nav bar). */
+        #biztrack-assistant-fab {
+          right: 16px;
+          bottom: calc(76px + env(safe-area-inset-bottom));
+        }
+        #biztrack-assistant-panel {
+          right: 16px;
+          left: 16px;
+          width: auto;
+          bottom: calc(144px + env(safe-area-inset-bottom));
+          max-height: calc(100vh - 220px);
+        }
       }
     `;
     document.head.appendChild(style);
