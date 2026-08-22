@@ -60,7 +60,7 @@ function highlightActiveNav() {
   });
 }
 
-/** Fill in the business name badge shown in the sidebar, if present. */
+/** Fill in the business name badge shown in the sidebar, if present. Shows the business logo instead of initials once one is set. */
 function renderBusinessBadge() {
   const nameEl = document.querySelector('[data-business-name]');
   if (!nameEl) return;
@@ -68,8 +68,60 @@ function renderBusinessBadge() {
   nameEl.textContent = business.name || 'Your Business';
   const typeEl = document.querySelector('[data-business-type]');
   if (typeEl) typeEl.textContent = business.type || '';
+
   const initialEl = document.querySelector('[data-business-initial]');
-  if (initialEl) initialEl.textContent = (business.name || 'B').charAt(0).toUpperCase();
+  if (!initialEl) return;
+
+  if (business.logo) {
+    initialEl.textContent = '';
+    initialEl.style.background = 'transparent';
+    let img = initialEl.querySelector('img');
+    if (!img) {
+      img = document.createElement('img');
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '50%';
+      initialEl.appendChild(img);
+    }
+    img.src = business.logo;
+    img.alt = business.name || 'Business logo';
+  } else {
+    initialEl.innerHTML = '';
+    initialEl.style.background = '';
+    initialEl.textContent = (business.name || 'B').charAt(0).toUpperCase();
+  }
+}
+
+/**
+ * Reads an image file, downsizes it to fit within maxDim x maxDim
+ * (keeping aspect ratio), and hands back a PNG data URL via callback.
+ * Keeps logos small so they don't bloat localStorage.
+ */
+function resizeImageFile(file, maxDim, callback) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      let width = img.width;
+      let height = img.height;
+      if (width > height && width > maxDim) {
+        height = Math.round(height * (maxDim / width));
+        width = maxDim;
+      } else if (height >= width && height > maxDim) {
+        width = Math.round(width * (maxDim / height));
+        height = maxDim;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      callback(canvas.toDataURL('image/png'));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 /** Lightweight toast notification. Requires a #toast-root element on the page. */
