@@ -100,19 +100,16 @@
     'report-income', 'report-expenses', 'report-profit'
   ];
 
-  var animatingNodes = new WeakSet();
-
-  function animateCountUp(el, toText) {
+  function animateCountUp(el, toText, onDone) {
     var match = toText.match(/^([^\d\-]*)(-?[\d,]+(?:\.\d+)?)(.*)$/);
-    if (!match) return;
+    if (!match) { if (onDone) onDone(); return; }
     var prefix = match[1];
     var target = parseFloat(match[2].replace(/,/g, ''));
     var suffix = match[3];
-    if (isNaN(target)) return;
+    if (isNaN(target)) { if (onDone) onDone(); return; }
 
     var duration = 550;
     var startTime = null;
-    animatingNodes.add(el);
     el.classList.add('anim-counting');
 
     function tick(now) {
@@ -124,9 +121,10 @@
       if (progress < 1) {
         requestAnimationFrame(tick);
       } else {
+        // Final write — happens exactly once, then we stop for good.
         el.textContent = prefix + Math.abs(Math.round(target)).toLocaleString() + suffix;
         el.classList.remove('anim-counting');
-        animatingNodes.delete(el);
+        if (onDone) onDone();
       }
     }
     requestAnimationFrame(tick);
@@ -135,10 +133,37 @@
   function watchCountUp(id) {
     var el = document.getElementById(id);
     if (!el) return;
+
+    var lastKnown = el.textContent; // the last value WE consider "settled"
+    var isAnimating = false;
+    var pendingText = null; // a newer target that arrived mid-animation
+
+    function runAnimation(toText) {
+      isAnimating = true;
+      lastKnown = toText;
+      animateCountUp(el, toText, function () {
+        isAnimating = false;
+        if (pendingText !== null && pendingText !== lastKnown) {
+          var next = pendingText;
+          pendingText = null;
+          runAnimation(next);
+        } else {
+          pendingText = null;
+        }
+      });
+    }
+
     var observer = new MutationObserver(function () {
-      if (animatingNodes.has(el)) return;
       var toText = el.textContent;
-      animateCountUp(el, toText);
+      // Our own final write echoes back here — since it matches what we
+      // already consider settled, this is where the old version looped
+      // forever. Ignoring a no-op change is what makes it actually stop.
+      if (toText === lastKnown) return;
+      if (isAnimating) {
+        pendingText = toText;
+        return;
+      }
+      runAnimation(toText);
     });
     observer.observe(el, { childList: true, characterData: true, subtree: true });
   }
