@@ -98,7 +98,8 @@ function getDefaultData() {
     },
     transactions: [],
     settings: {
-      theme: 'light'
+      theme: 'light',
+      language: 'en'
     }
   };
 }
