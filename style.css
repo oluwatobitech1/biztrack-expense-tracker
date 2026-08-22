@@ -1040,6 +1040,46 @@ body.modal-open {
   .install-modal-box {
     max-width: calc(100vw - 32px);
   }
+
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .breakdown-row {
+    gap: 8px;
+  }
+
+  .breakdown-row .breakdown-amount {
+    width: 70px;
+    font-size: 0.8rem;
+  }
+
+  .breakdown-row .breakdown-label {
+    font-size: 0.82rem;
+  }
+
+  .txn-row {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .settings-row {
+    flex-wrap: wrap;
+  }
+
+  .settings-row > button,
+  .settings-row .btn {
+    width: 100%;
+  }
+
+  .settings-logo-row {
+    flex-wrap: wrap;
+  }
+
+  .settings-logo-actions {
+    flex-wrap: wrap;
+  }
 }
 
 /* =========================================================
@@ -1817,6 +1857,31 @@ body.modal-open {
   font-size: 0.8rem;
   color: var(--color-text-muted);
   margin-top: 2px;
+}
+
+.settings-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-logo-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.settings-logo-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .theme-toggle {
