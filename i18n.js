@@ -55,7 +55,18 @@ const TRANSLATIONS = {
     },
     cta: { title: 'Start tracking your business today.', getStarted: 'Get Started' },
     footer: { tagline: 'BizTrack V1 — your data stays in this browser.' },
-    auth: { getStartedFree: "Get started — it's free" },
+    auth: {
+      getStartedFree: "Get started — it's free",
+      createAccountTitle: 'Create your account.',
+      createAccountSub: 'Start tracking sales, stock and cash in minutes.',
+      nameLabel: 'Your name', namePlaceholder: 'Enter your full name',
+      usernameLabel: 'Username', usernamePlaceholder: 'Choose a username',
+      countryLabel: 'Country', currencyLabel: 'Currency',
+      emailLabel: 'Email address', emailPlaceholder: 'Enter your email',
+      passwordLabel: 'Password', passwordPlaceholder: 'Enter your password',
+      termsAgreePrefix: 'I agree to the', termsLink: 'Terms of Use and Privacy Policy',
+      createAccountBtn: 'Create account →', haveAccount: 'Already have an account?'
+    },
     setup: {
       step1Title: "What's your business called?",
       step1Sub: "This is how it'll show up across your dashboard.",
@@ -103,7 +114,18 @@ const TRANSLATIONS = {
     },
     cta: { title: "Commencez à suivre votre entreprise dès aujourd'hui.", getStarted: 'Commencer' },
     footer: { tagline: 'BizTrack V1 — vos données restent dans ce navigateur.' },
-    auth: { getStartedFree: "Commencer — c'est gratuit" },
+    auth: {
+      getStartedFree: "Commencer — c'est gratuit",
+      createAccountTitle: 'Créez votre compte.',
+      createAccountSub: 'Commencez à suivre vos ventes, votre stock et votre trésorerie en quelques minutes.',
+      nameLabel: 'Votre nom', namePlaceholder: 'Entrez votre nom complet',
+      usernameLabel: "Nom d'utilisateur", usernamePlaceholder: "Choisissez un nom d'utilisateur",
+      countryLabel: 'Pays', currencyLabel: 'Devise',
+      emailLabel: 'Adresse e-mail', emailPlaceholder: 'Entrez votre e-mail',
+      passwordLabel: 'Mot de passe', passwordPlaceholder: 'Entrez votre mot de passe',
+      termsAgreePrefix: "J'accepte les", termsLink: "Conditions d'utilisation et la Politique de confidentialité",
+      createAccountBtn: 'Créer un compte →', haveAccount: 'Vous avez déjà un compte ?'
+    },
     setup: {
       step1Title: "Comment s'appelle votre entreprise ?",
       step1Sub: "C'est ainsi qu'elle apparaîtra dans votre tableau de bord.",
@@ -151,7 +173,18 @@ const TRANSLATIONS = {
     },
     cta: { title: 'Empiece a controlar su negocio hoy mismo.', getStarted: 'Comenzar' },
     footer: { tagline: 'BizTrack V1 — sus datos permanecen en este navegador.' },
-    auth: { getStartedFree: 'Empezar — es gratis' },
+    auth: {
+      getStartedFree: 'Empezar — es gratis',
+      createAccountTitle: 'Cree su cuenta.',
+      createAccountSub: 'Comience a controlar ventas, inventario y efectivo en minutos.',
+      nameLabel: 'Su nombre', namePlaceholder: 'Ingrese su nombre completo',
+      usernameLabel: 'Nombre de usuario', usernamePlaceholder: 'Elija un nombre de usuario',
+      countryLabel: 'País', currencyLabel: 'Moneda',
+      emailLabel: 'Correo electrónico', emailPlaceholder: 'Ingrese su correo electrónico',
+      passwordLabel: 'Contraseña', passwordPlaceholder: 'Ingrese su contraseña',
+      termsAgreePrefix: 'Acepto los', termsLink: 'Términos de Uso y la Política de Privacidad',
+      createAccountBtn: 'Crear cuenta →', haveAccount: '¿Ya tiene una cuenta?'
+    },
     setup: {
       step1Title: '¿Cómo se llama su negocio?',
       step1Sub: 'Así es como aparecerá en su panel.',
@@ -199,7 +232,18 @@ const TRANSLATIONS = {
     },
     cta: { title: 'Comece a acompanhar seu negócio hoje.', getStarted: 'Começar' },
     footer: { tagline: 'BizTrack V1 — seus dados ficam neste navegador.' },
-    auth: { getStartedFree: 'Começar — é grátis' },
+    auth: {
+      getStartedFree: 'Começar — é grátis',
+      createAccountTitle: 'Crie sua conta.',
+      createAccountSub: 'Comece a acompanhar vendas, estoque e caixa em minutos.',
+      nameLabel: 'Seu nome', namePlaceholder: 'Digite seu nome completo',
+      usernameLabel: 'Nome de usuário', usernamePlaceholder: 'Escolha um nome de usuário',
+      countryLabel: 'País', currencyLabel: 'Moeda',
+      emailLabel: 'Endereço de e-mail', emailPlaceholder: 'Digite seu e-mail',
+      passwordLabel: 'Senha', passwordPlaceholder: 'Digite sua senha',
+      termsAgreePrefix: 'Concordo com os', termsLink: 'Termos de Uso e a Política de Privacidade',
+      createAccountBtn: 'Criar conta →', haveAccount: 'Já tem uma conta?'
+    },
     setup: {
       step1Title: 'Qual é o nome do seu negócio?',
       step1Sub: 'É assim que ele aparecerá no seu painel.',
@@ -247,7 +291,18 @@ const TRANSLATIONS = {
     },
     cta: { title: 'ابدأ بتتبع عملك اليوم.', getStarted: 'ابدأ الآن' },
     footer: { tagline: 'BizTrack V1 — تبقى بياناتك في هذا المتصفح.' },
-    auth: { getStartedFree: 'ابدأ الآن — مجانًا' },
+    auth: {
+      getStartedFree: 'ابدأ الآن — مجانًا',
+      createAccountTitle: 'أنشئ حسابك.',
+      createAccountSub: 'ابدأ بتتبع المبيعات والمخزون والنقد في دقائق.',
+      nameLabel: 'اسمك', namePlaceholder: 'أدخل اسمك الكامل',
+      usernameLabel: 'اسم المستخدم', usernamePlaceholder: 'اختر اسم مستخدم',
+      countryLabel: 'الدولة', currencyLabel: 'العملة',
+      emailLabel: 'البريد الإلكتروني', emailPlaceholder: 'أدخل بريدك الإلكتروني',
+      passwordLabel: 'كلمة المرور', passwordPlaceholder: 'أدخل كلمة المرور',
+      termsAgreePrefix: 'أوافق على', termsLink: 'شروط الاستخدام وسياسة الخصوصية',
+      createAccountBtn: 'إنشاء حساب ←', haveAccount: 'هل لديك حساب بالفعل؟'
+    },
     setup: {
       step1Title: 'ما اسم عملك؟',
       step1Sub: 'هكذا سيظهر في لوحة التحكم الخاصة بك.',
