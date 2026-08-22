@@ -19,54 +19,78 @@
 
   <div class="setup-shell">
     <div class="card setup-card auth-card">
+      <div style="display:flex; justify-content:flex-end;">
+        <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
+      </div>
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <span class="auth-badge"><span class="dot"></span> Get started — it's free</span>
-      <h1>Create your account.</h1>
-      <p class="auth-sub">Start tracking sales, stock and cash in minutes.</p>
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.getStartedFree">Get started — it's free</span></span>
+      <h1 data-i18n="auth.createAccountTitle">Create your account.</h1>
+      <p class="auth-sub" data-i18n="auth.createAccountSub">Start tracking sales, stock and cash in minutes.</p>
 
       <div class="auth-error-banner" id="auth-error-banner"></div>
 
       <form id="signup-form" novalidate>
         <div class="form-group">
-          <label class="form-label" for="name-input">Your name</label>
-          <input type="text" id="name-input" class="form-input" placeholder="Enter your full name" autocomplete="name" />
+          <label class="form-label" for="name-input" data-i18n="auth.nameLabel">Your name</label>
+          <input type="text" id="name-input" class="form-input" placeholder="Enter your full name" data-i18n-placeholder="auth.namePlaceholder" autocomplete="name" />
         </div>
 
         <div class="form-row-2">
           <div class="form-group">
-            <label class="form-label" for="country-select">Country</label>
+            <label class="form-label" for="country-select" data-i18n="auth.countryLabel">Country</label>
             <select id="country-select" class="form-select"></select>
           </div>
           <div class="form-group">
-            <label class="form-label">Currency</label>
+            <label class="form-label" data-i18n="auth.currencyLabel">Currency</label>
             <div class="form-input" id="currency-display" style="display:flex; align-items:center; color: var(--color-text-muted);"></div>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="email-input">Email address</label>
-          <input type="email" id="email-input" class="form-input" placeholder="Enter your email" autocomplete="email" />
+          <label class="form-label" for="email-input" data-i18n="auth.emailLabel">Email address</label>
+          <input type="email" id="email-input" class="form-input" placeholder="Enter your email" data-i18n-placeholder="auth.emailPlaceholder" autocomplete="email" />
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password-input">Password</label>
-          <input type="password" id="password-input" class="form-input" placeholder="Enter your password" autocomplete="new-password" />
+          <label class="form-label" for="password-input" data-i18n="auth.passwordLabel">Password</label>
+          <input type="password" id="password-input" class="form-input" placeholder="Enter your password" data-i18n-placeholder="auth.passwordPlaceholder" autocomplete="new-password" />
         </div>
 
         <label class="checkbox-row">
           <input type="checkbox" id="terms-checkbox" />
-          <span>I agree to the <a href="#" onclick="return false;">Terms of Use and Privacy Policy</a></span>
+          <span><span data-i18n="auth.termsAgreePrefix">I agree to the</span> <a href="#" onclick="return false;" data-i18n="auth.termsLink">Terms of Use and Privacy Policy</a></span>
         </label>
 
-        <button type="submit" class="btn btn-primary btn-block">Create account →</button>
+        <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.createAccountBtn">Create account →</button>
       </form>
 
-      <p class="auth-footer-link">Already have an account? <a href="login.html">Sign in</a></p>
+      <p class="auth-footer-link"><span data-i18n="auth.haveAccount">Already have an account?</span> <a href="login.html" data-i18n="nav.signIn">Sign in</a></p>
     </div>
   </div>
 
   <script src="storage.js"></script>
+  <script src="i18n.js"></script>
   <script src="signup.js"></script>
+  <script>
+    // Auto-suggest a language based on the chosen country, unless the
+    // person has already picked a language themselves this visit.
+    (function () {
+      var countrySelect = document.getElementById('country-select');
+      var langSwitcher = document.querySelector('[data-language-switcher]');
+      var manualOverride = false;
+      if (langSwitcher) {
+        langSwitcher.addEventListener('change', function () { manualOverride = true; });
+      }
+      if (countrySelect) {
+        countrySelect.addEventListener('change', function () {
+          if (manualOverride) return;
+          var suggested = suggestLanguageForCountry(countrySelect.value);
+          setLanguage(suggested);
+          if (typeof applyTranslations === 'function') applyTranslations();
+        });
+      }
+    })();
+  </script>
   <script src="animate.js"></script>
 </body>
 </html>
