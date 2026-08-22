@@ -129,7 +129,7 @@
 
   function greet() {
     const business = getBusiness();
-    addBotMessage('Hi! I\'m your BizTrack assistant for ' + (business.name || 'your business') + '. Ask me about your income, expenses or profit \u2014 or tell me to add a transaction.');
+    addGreetingMessage('Hi! I\'m your BizTrack assistant for ' + (business.name || 'your business') + '. Ask me about your income, expenses or profit \u2014 or tell me to add a transaction.');
   }
 
   function renderSuggestions() {
@@ -152,6 +152,23 @@
   /* ---------- Message rendering ---------- */
   function addUserMessage(text) { appendMessage(text, 'user'); }
   function addBotMessage(text) { appendMessage(text, 'bot'); }
+
+  /** Only used for the static, developer-authored greeting — wraps the
+   *  emoji in a span so it can get its own wave animation. Regular chat
+   *  messages stay on the textContent path below for safety. */
+  function addGreetingMessage(text) {
+    const list = document.getElementById('btai-messages');
+    const bubble = document.createElement('div');
+    bubble.className = 'btai-msg btai-msg--bot';
+    const wave = document.createElement('span');
+    wave.className = 'btai-wave-emoji';
+    wave.textContent = '\uD83D\uDC4B';
+    bubble.appendChild(wave);
+    bubble.appendChild(document.createTextNode(' ' + text));
+    list.appendChild(bubble);
+    list.scrollTop = list.scrollHeight;
+  }
+
   function appendMessage(text, who) {
     const list = document.getElementById('btai-messages');
     const bubble = document.createElement('div');
