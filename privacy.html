@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — BizTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
+  <link rel="shortcut icon" href="icons/favicon.ico" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    .legal-shell {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px 80px;
+    }
+    .legal-card {
+      width: 100%;
+      max-width: 760px;
+    }
+    .legal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .legal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legal-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      object-fit: cover;
+    }
+    .legal-brand span {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .legal-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--color-bg);
+      padding: 4px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .legal-tab {
+      border: none;
+      background: transparent;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .legal-tab.is-active {
+      background: var(--color-card);
+      color: var(--color-text);
+      box-shadow: var(--shadow-card);
+    }
+    .legal-title {
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+    }
+    .legal-updated {
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+    .legal-intro {
+      color: var(--color-text);
+      font-size: 0.96rem;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .legal-section {
+      margin-bottom: 26px;
+    }
+    .legal-section h2 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+    .legal-section p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+    .legal-data-label {
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .legal-data-block {
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .legal-data-block p {
+      margin-bottom: 0;
+    }
+    .legal-footer-link {
+      margin-top: 32px;
+      padding-top: 22px;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+    .legal-footer-link a {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="legal-shell">
+    <div class="card legal-card">
+      <div class="legal-topbar">
+        <a class="legal-brand" href="signup.html">
+          <img src="logo-mark.png" alt="BizTrack logo" />
+          <span>BizTrack</span>
+        </a>
+        <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
+      </div>
+
+      <div class="legal-tabs">
+        <a class="legal-tab" href="terms.html" data-i18n="legal.common.navTerms">Terms of Use</a>
+        <a class="legal-tab is-active" href="privacy.html" data-i18n="legal.common.navPrivacy">Privacy Policy</a>
+      </div>
+
+      <h1 class="legal-title" data-i18n="legal.privacy.title">Privacy Policy</h1>
+      <p class="legal-updated"><span data-i18n="legal.common.lastUpdated">Last updated</span>: <span data-i18n="legal.common.effectiveDate">August 22, 2026</span></p>
+
+      <p class="legal-intro" data-i18n="legal.privacy.intro">This Privacy Policy explains how BizTrack ("we", "us", "our"), operated by Oluwatobi Ayodele, collects, uses and protects information when you use the Service.</p>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s1Title">1. Information We Collect</h2>
+        <div class="legal-data-block">
+          <p><span class="legal-data-label" data-i18n="legal.privacy.s1AccountLabel">Account information (sent to and stored on our server):</span></p>
+          <p data-i18n="legal.privacy.s1AccountBody">Your name, username, email address, password (stored in hashed form), country and preferred currency.</p>
+        </div>
+        <div class="legal-data-block">
+          <p><span class="legal-data-label" data-i18n="legal.privacy.s1BusinessLabel">Business data (stored locally in your browser only):</span></p>
+          <p data-i18n="legal.privacy.s1BusinessBody">Sales, expenses, stock levels, cash entries and other transactions you record. We do not receive, transmit or store this data on our servers.</p>
+        </div>
+        <div class="legal-data-block">
+          <p><span class="legal-data-label" data-i18n="legal.privacy.s1TechLabel">Technical information:</span></p>
+          <p data-i18n="legal.privacy.s1TechBody">Basic details such as browser type and language preference, used locally for app settings or, where applicable, logged by our hosting provider for security and reliability.</p>
+        </div>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s2Title">2. How We Use Your Information</h2>
+        <p data-i18n="legal.privacy.s2Body">We use account information to create and secure your account, let you sign in, personalize the app (such as currency and language), communicate important service updates, and improve BizTrack. We do not use your business data for any purpose, because it never reaches our servers.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s3Title">3. Where Your Data Lives</h2>
+        <p data-i18n="legal.privacy.s3AccountBody">Account data lives on our servers, or those of our hosting provider, and is protected as described in "Data Security" below.</p>
+        <p data-i18n="legal.privacy.s3BusinessBody">Business data lives only in your browser's local storage on the device you use. It moves with the browser, not with your account, so it will not appear if you sign in on a different device or browser, and it can be lost if you clear site data.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s4Title">4. Sharing &amp; Disclosure</h2>
+        <p data-i18n="legal.privacy.s4Body">We do not sell your personal information. We may share account information only with service providers who help us run BizTrack (such as hosting), under confidentiality obligations; if required by law, regulation or valid legal process; or to protect the rights, safety or property of BizTrack, our users or others. We do not have access to your business data to share, since it is not stored on our servers.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s5Title">5. Data Security</h2>
+        <p data-i18n="legal.privacy.s5Body">We use reasonable technical and organizational measures, such as password hashing and secure connections, to protect account information. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s6Title">6. Cookies &amp; Local Storage</h2>
+        <p data-i18n="legal.privacy.s6Body">BizTrack uses browser local storage to keep you signed in and to store your business data and app preferences on your device. This is essential to how the app works; disabling it may prevent BizTrack from functioning properly.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s7Title">7. Your Rights</h2>
+        <p data-i18n="legal.privacy.s7Body">Depending on applicable law, including the Nigeria Data Protection Act 2023, you may have the right to access the personal data we hold about you, request correction of inaccurate data, request deletion of your account and associated data, object to or restrict certain processing, and request a copy of your data in a portable format. To exercise these rights, contact us using the details below.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s8Title">8. Data Retention</h2>
+        <p data-i18n="legal.privacy.s8Body">We keep account information for as long as your account is active, and for a reasonable period afterward to comply with legal obligations or resolve disputes. You can request deletion of your account at any time.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s9Title">9. Children's Privacy</h2>
+        <p data-i18n="legal.privacy.s9Body">BizTrack is not intended for children under 18. We do not knowingly collect information from children. If you believe a child has created an account, contact us and we will take appropriate steps to delete it.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s10Title">10. International Users</h2>
+        <p data-i18n="legal.privacy.s10Body">BizTrack may be used from countries other than Nigeria. By using the Service, you understand that your account information may be processed and stored in Nigeria or in the country where our hosting provider operates.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s11Title">11. Changes to This Policy</h2>
+        <p data-i18n="legal.privacy.s11Body">We may update this Privacy Policy from time to time. We will update the "last updated" date, and where changes are material, we will make reasonable efforts to notify you.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.privacy.s12Title">12. Contact</h2>
+        <p data-i18n="legal.privacy.s12Body">Questions about this Privacy Policy or your data? Contact Oluwatobi Ayodele at support@biztrack.app.</p>
+      </div>
+
+      <p class="legal-footer-link"><a href="signup.html" data-i18n="legal.common.backToSignup">Back to sign up</a></p>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="legal-i18n.js"></script>
+  <script src="animate.js"></script>
+</body>
+</html>

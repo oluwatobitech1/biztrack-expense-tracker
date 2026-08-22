@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Use — BizTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
+  <link rel="shortcut icon" href="icons/favicon.ico" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    .legal-shell {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px 80px;
+    }
+    .legal-card {
+      width: 100%;
+      max-width: 760px;
+    }
+    .legal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .legal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legal-brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      object-fit: cover;
+    }
+    .legal-brand span {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .legal-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--color-bg);
+      padding: 4px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .legal-tab {
+      border: none;
+      background: transparent;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .legal-tab.is-active {
+      background: var(--color-card);
+      color: var(--color-text);
+      box-shadow: var(--shadow-card);
+    }
+    .legal-title {
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+    }
+    .legal-updated {
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+    .legal-intro {
+      color: var(--color-text);
+      font-size: 0.96rem;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .legal-section {
+      margin-bottom: 26px;
+    }
+    .legal-section h2 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+    .legal-section p {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+    .legal-section ul {
+      margin: 10px 0;
+      padding-inline-start: 20px;
+      list-style: disc;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .legal-section li {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+    .legal-footer-link {
+      margin-top: 32px;
+      padding-top: 22px;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+    .legal-footer-link a {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="legal-shell">
+    <div class="card legal-card">
+      <div class="legal-topbar">
+        <a class="legal-brand" href="signup.html">
+          <img src="logo-mark.png" alt="BizTrack logo" />
+          <span>BizTrack</span>
+        </a>
+        <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
+      </div>
+
+      <div class="legal-tabs">
+        <a class="legal-tab is-active" href="terms.html" data-i18n="legal.common.navTerms">Terms of Use</a>
+        <a class="legal-tab" href="privacy.html" data-i18n="legal.common.navPrivacy">Privacy Policy</a>
+      </div>
+
+      <h1 class="legal-title" data-i18n="legal.terms.title">Terms of Use</h1>
+      <p class="legal-updated"><span data-i18n="legal.common.lastUpdated">Last updated</span>: <span data-i18n="legal.common.effectiveDate">August 22, 2026</span></p>
+
+      <p class="legal-intro" data-i18n="legal.terms.intro">These Terms of Use ("Terms") govern your access to and use of BizTrack (the "Service"), operated by Oluwatobi Ayodele ("we", "us", "our"). By creating an account or using BizTrack, you agree to these Terms. If you do not agree, please do not use the Service.</p>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s1Title">1. What BizTrack Is</h2>
+        <p data-i18n="legal.terms.s1Body">BizTrack is a tool for small businesses to record sales, expenses, stock and cash flow. It is provided to help you keep track of your business finances and is not accounting, tax or legal advice. Please consult a qualified professional for those matters.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s2Title">2. Eligibility</h2>
+        <p data-i18n="legal.terms.s2Body">You must be at least 18 years old, or the age of legal majority in your country, and have the authority to enter into these Terms, to create a BizTrack account. By registering, you confirm that the information you provide — your name, username, email and country — is accurate and that you will keep it up to date.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s3Title">3. Your Account</h2>
+        <p data-i18n="legal.terms.s3Body">You are responsible for keeping your password confidential and for all activity under your account. Tell us immediately if you suspect unauthorized access. We may suspend or close an account we reasonably believe is being misused, was created with false information, or has been inactive for an extended period.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s4Title">4. Your Business Data</h2>
+        <p data-i18n="legal.terms.s4Intro">BizTrack stores your business records — sales, expenses, stock and cash entries — locally in your browser. This data is not automatically sent to or stored on our servers, which means:</p>
+        <ul>
+          <li data-i18n="legal.terms.s4li1">It stays on the device and browser where you entered it.</li>
+          <li data-i18n="legal.terms.s4li2">Clearing your browser data, uninstalling the app, or switching devices can permanently delete it.</li>
+          <li data-i18n="legal.terms.s4li3">You are responsible for backing up or exporting records you want to keep.</li>
+        </ul>
+        <p data-i18n="legal.terms.s4Outro">We are not liable for business data lost through browser storage limits, clearing of site data, device failure, or similar events.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s5Title">5. Acceptable Use</h2>
+        <p data-i18n="legal.terms.s5Body">You agree not to use BizTrack for unlawful purposes, attempt to access another user's account without permission, reverse-engineer, copy or resell the Service, interfere with or disrupt its operation, or upload content that is fraudulent, infringing or harmful.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s6Title">6. Intellectual Property</h2>
+        <p data-i18n="legal.terms.s6Body">BizTrack's name, logo, design and code — excluding your own business data — belong to us or our licensors. These Terms do not grant you any rights to our trademarks or branding beyond what is needed to use the Service normally.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s7Title">7. Changes to the Service</h2>
+        <p data-i18n="legal.terms.s7Body">We may add, change or remove features, and may modify or discontinue BizTrack at any time. We will try to give reasonable notice of significant changes where practical, but we do not guarantee the Service will always be available without interruption.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s8Title">8. Disclaimer of Warranties</h2>
+        <p data-i18n="legal.terms.s8Body">BizTrack is provided "as is" and "as available," without warranties of any kind, express or implied, including fitness for a particular purpose, accuracy, or uninterrupted operation. You use it at your own risk.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s9Title">9. Limitation of Liability</h2>
+        <p data-i18n="legal.terms.s9Body">To the fullest extent permitted by law, we are not liable for indirect, incidental or consequential damages, or for loss of data, profits or business arising from your use of, or inability to use, BizTrack.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s10Title">10. Termination</h2>
+        <p data-i18n="legal.terms.s10Body">You may stop using BizTrack and delete your account at any time. We may suspend or terminate access for breach of these Terms. Provisions that by their nature should survive — such as intellectual property and limitation of liability — will continue to apply after termination.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s11Title">11. Governing Law</h2>
+        <p data-i18n="legal.terms.s11Body">These Terms are governed by the laws of the Federal Republic of Nigeria. Any dispute arising from these Terms or your use of BizTrack will be subject to the exclusive jurisdiction of the courts of Nigeria.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s12Title">12. Changes to These Terms</h2>
+        <p data-i18n="legal.terms.s12Body">We may update these Terms from time to time. If we make material changes, we will update the "last updated" date and, where appropriate, let you know within the app. Continuing to use BizTrack after changes take effect means you accept the updated Terms.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2 data-i18n="legal.terms.s13Title">13. Contact</h2>
+        <p data-i18n="legal.terms.s13Body">Questions about these Terms? Contact Oluwatobi Ayodele at support@biztrack.app.</p>
+      </div>
+
+      <p class="legal-footer-link"><a href="signup.html" data-i18n="legal.common.backToSignup">Back to sign up</a></p>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="legal-i18n.js"></script>
+  <script src="animate.js"></script>
+</body>
+</html>
