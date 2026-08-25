@@ -114,3 +114,53 @@ function isValidUsername(username) {
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+/**
+ * BizTrack currently stores only a single local account per browser
+ * (see storage.js: createAccount() saves name/email/passwordHash/country,
+ * with no username field and no list of other accounts to check against).
+ * There is no real multi-user store yet, so nothing can actually be
+ * "taken" — this keeps the validation flow working without blocking
+ * real signups until a proper backend/user list exists.
+ */
+function isUsernameTaken(username) {
+  return false;
+}
+
+/**
+ * Suggests a language code based on a country name, for auto-switching
+ * the UI language when someone picks their country at signup.
+ * Falls back to 'en' for any country not explicitly mapped, or if the
+ * country isn't recognized. Adjust the codes below to match whatever
+ * languages i18n.js actually supports in this app.
+ */
+function suggestLanguageForCountry(country) {
+  const countryToLanguage = {
+    'France': 'fr',
+    'Germany': 'de',
+    'Spain': 'es',
+    'Mexico': 'es',
+    'Argentina': 'es',
+    'Colombia': 'es',
+    'Chile': 'es',
+    'Italy': 'it',
+    'Brazil': 'pt',
+    'Netherlands': 'nl',
+    'Turkey': 'tr',
+    'Saudi Arabia': 'ar',
+    'United Arab Emirates': 'ar',
+    'Qatar': 'ar',
+    'Egypt': 'ar',
+    'Morocco': 'ar',
+    'China': 'zh',
+    'Japan': 'ja',
+    'South Korea': 'ko',
+    'Vietnam': 'vi',
+    'Indonesia': 'id',
+    'Poland': 'pl',
+    'Sweden': 'sv',
+    'Norway': 'no'
+  };
+
+  return countryToLanguage[country] || 'en';
+}
