@@ -18,7 +18,9 @@
 <body>
 
   <div class="setup-shell">
-    <div class="card setup-card auth-card">
+
+    <!-- Signup form -->
+    <div class="card setup-card auth-card" id="signup-panel">
       <div style="display:flex; justify-content:flex-end;">
         <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
       </div>
@@ -51,14 +53,15 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="email-input" data-i18n="auth.emailLabel">Email address</label>
-          <input type="email" id="email-input" class="form-input" placeholder="Enter your email" data-i18n-placeholder="auth.emailPlaceholder" autocomplete="email" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="password-input" data-i18n="auth.passwordLabel">Password</label>
-          <input type="password" id="password-input" class="form-input" placeholder="Enter your password" data-i18n-placeholder="auth.passwordPlaceholder" autocomplete="new-password" />
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="pin-input" data-i18n="auth.pinLabel">4-digit PIN</label>
+            <input type="password" id="pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" data-i18n-placeholder="auth.pinPlaceholder" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pin-confirm-input" data-i18n="auth.pinConfirmLabel">Confirm PIN</label>
+            <input type="password" id="pin-confirm-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" data-i18n-placeholder="auth.pinPlaceholder" />
+          </div>
         </div>
 
         <label class="checkbox-row">
@@ -71,6 +74,29 @@
 
       <p class="auth-footer-link"><span data-i18n="auth.haveAccount">Already have an account?</span> <a href="login.html" data-i18n="nav.signIn">Sign in</a></p>
     </div>
+
+    <!-- Recovery code reveal — shown once, right after account creation -->
+    <div class="card setup-card auth-card" id="recovery-panel" style="display:none;">
+      <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
+      <span class="auth-badge"><span class="dot"></span> Save this now</span>
+      <h1>Your recovery code</h1>
+      <p class="auth-sub">
+        There's no email on this account, so this code is the <strong>only</strong> way to reset your PIN if you forget it.
+        Write it down or save it somewhere safe — it will not be shown again.
+      </p>
+
+      <div id="recovery-code-display" style="font-family: monospace; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; text-align: center; background: var(--color-primary-light); color: var(--color-primary); padding: 18px 12px; border-radius: 12px; margin: 20px 0; user-select: all;"></div>
+
+      <button type="button" class="btn btn-secondary btn-block" id="copy-recovery-btn" style="margin-bottom: 16px;">Copy code</button>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="recovery-saved-checkbox" />
+        <span>I've saved my recovery code somewhere safe</span>
+      </label>
+
+      <button type="button" class="btn btn-primary btn-block" id="recovery-continue-btn" disabled style="margin-top: 12px;">Continue →</button>
+    </div>
+
   </div>
 
   <script src="storage.js"></script>
