@@ -33,13 +33,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="login-password-input">Password</label>
-          <input type="password" id="login-password-input" class="form-input" placeholder="Enter your password" autocomplete="current-password" />
+          <label class="form-label" for="login-pin-input">PIN</label>
+          <input type="password" id="login-pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" />
         </div>
 
         <button type="submit" class="btn btn-primary btn-block" id="login-submit-btn">Sign in →</button>
       </form>
 
+      <p class="auth-footer-link"><a href="recover.html">Forgot your PIN?</a></p>
       <p class="auth-footer-link">Don't have an account? <a href="signup.html">Create one</a></p>
     </div>
   </div>
