@@ -30,28 +30,70 @@ document.addEventListener('DOMContentLoaded', () => {
   countrySelect.addEventListener('change', updateCurrencyDisplay);
   updateCurrencyDisplay();
 
+  // Only allow digits in the PIN fields, and cap length defensively
+  // even though maxlength is already set on the inputs.
+  ['pin-input', 'pin-confirm-input'].forEach((id) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      el.value = el.value.replace(/\D/g, '').slice(0, 4);
+    });
+  });
+
   document.getElementById('signup-form').addEventListener('submit', handleSignup);
+
+  // Recovery code screen wiring
+  const copyBtn = document.getElementById('copy-recovery-btn');
+  const savedCheckbox = document.getElementById('recovery-saved-checkbox');
+  const continueBtn = document.getElementById('recovery-continue-btn');
+  const codeDisplay = document.getElementById('recovery-code-display');
+
+  copyBtn.addEventListener('click', () => {
+    const code = codeDisplay.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToastSafe('Recovery code copied.');
+      }).catch(() => {
+        showToastSafe('Could not copy automatically — please copy it manually.', 'error');
+      });
+    } else {
+      showToastSafe('Please select and copy the code manually.', 'error');
+    }
+  });
+
+  savedCheckbox.addEventListener('change', () => {
+    continueBtn.disabled = !savedCheckbox.checked;
+  });
+
+  continueBtn.addEventListener('click', () => {
+    window.location.href = 'setup.html';
+  });
 });
+
+function showToastSafe(message, variant) {
+  if (typeof showToast === 'function') {
+    showToast(message, variant);
+  }
+}
 
 function handleSignup(e) {
   e.preventDefault();
 
   const nameInput = document.getElementById('name-input');
   const usernameInput = document.getElementById('username-input');
-  const emailInput = document.getElementById('email-input');
-  const passwordInput = document.getElementById('password-input');
+  const pinInput = document.getElementById('pin-input');
+  const pinConfirmInput = document.getElementById('pin-confirm-input');
   const termsCheckbox = document.getElementById('terms-checkbox');
   const countrySelect = document.getElementById('country-select');
   const errorBanner = document.getElementById('auth-error-banner');
   const submitBtn = document.getElementById('signup-submit-btn');
 
-  [nameInput, usernameInput, emailInput, passwordInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
+  [nameInput, usernameInput, pinInput, pinConfirmInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
   errorBanner.classList.remove('is-visible');
 
   const name = nameInput.value.trim();
   const username = usernameInput.value.trim();
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+  const pin = pinInput.value;
+  const pinConfirm = pinConfirmInput.value;
 
   let hasError = false;
   let message = '';
@@ -72,13 +114,13 @@ function handleSignup(e) {
     countrySelect.classList.add('is-invalid');
     message = 'Please select your country.';
     hasError = true;
-  } else if (!email || !isValidEmail(email)) {
-    emailInput.classList.add('is-invalid');
-    message = 'Please enter a valid email address.';
+  } else if (!/^\d{4}$/.test(pin)) {
+    pinInput.classList.add('is-invalid');
+    message = 'PIN must be exactly 4 digits.';
     hasError = true;
-  } else if (!password || password.length < 6) {
-    passwordInput.classList.add('is-invalid');
-    message = 'Password must be at least 6 characters.';
+  } else if (pinConfirm !== pin) {
+    pinConfirmInput.classList.add('is-invalid');
+    message = 'PINs do not match.';
     hasError = true;
   } else if (!termsCheckbox.checked) {
     message = 'Please agree to the Terms of Use and Privacy Policy.';
@@ -95,36 +137,23 @@ function handleSignup(e) {
 
   setButtonLoading(submitBtn, true);
 
-  createAccount({
+  const recoveryCode = createAccount({
     name,
     username,
-    email,
-    password,
+    pin,
     country: countrySelect.value,
     currency: match ? match.code : 'USD'
   });
 
-  window.location.href = 'setup.html';
+  // Show the recovery code screen instead of redirecting immediately —
+  // this is the only time it will ever be shown.
+  document.getElementById('signup-panel').style.display = 'none';
+  document.getElementById('recovery-panel').style.display = 'block';
+  document.getElementById('recovery-code-display').textContent = recoveryCode;
 }
 
 function isValidUsername(username) {
   return /^[a-zA-Z0-9_.]{3,}$/.test(username);
-}
-
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-/**
- * BizTrack currently stores only a single local account per browser
- * (see storage.js: createAccount() saves name/email/passwordHash/country,
- * with no username field and no list of other accounts to check against).
- * There is no real multi-user store yet, so nothing can actually be
- * "taken" — this keeps the validation flow working without blocking
- * real signups until a proper backend/user list exists.
- */
-function isUsernameTaken(username) {
-  return false;
 }
 
 /**
