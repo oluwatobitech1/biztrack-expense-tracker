@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   currencySelect.value = business.currency || 'USD';
 
   const account = getAccount();
-  document.getElementById('account-email-label').textContent = account.email || '';
+  document.getElementById('account-username-label').textContent = account.username || '';
 
   document.getElementById('save-business-btn').addEventListener('click', () => {
     const name = document.getElementById('settings-business-name').value.trim();
