@@ -37,15 +37,22 @@ function setGreeting(el) {
   el.textContent = `${greeting} \uD83D\uDC4B`;
 }
 
-/** Redirect to login if no session, or to setup if the business profile is incomplete. Call on every app page. */
+/**
+ * Redirect to login if no session, or to setup if the business profile is
+ * incomplete. Call on every app page. Returns true if the page is clear to
+ * render, false if a redirect was triggered (so the caller can bail out
+ * instead of rendering with no data).
+ */
 function requireSetup() {
   if (!isLoggedIn()) {
     window.location.href = 'login.html';
-    return;
+    return false;
   }
   if (!isSetupComplete()) {
     window.location.href = 'setup.html';
+    return false;
   }
+  return true;
 }
 
 /** Highlight the current page in sidebar + mobile nav based on body[data-page]. */
