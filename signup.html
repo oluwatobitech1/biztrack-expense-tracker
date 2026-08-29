@@ -78,23 +78,23 @@
     <!-- Recovery code reveal — shown once, right after account creation -->
     <div class="card setup-card auth-card" id="recovery-panel" style="display:none;">
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <span class="auth-badge"><span class="dot"></span> Save this now</span>
-      <h1>Your recovery code</h1>
-      <p class="auth-sub">
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.saveThisNow">Save this now</span></span>
+      <h1 data-i18n="auth.yourRecoveryCode">Your recovery code</h1>
+      <p class="auth-sub" data-i18n="auth.recoveryCodeWarning">
         There's no email on this account, so this code is the <strong>only</strong> way to reset your PIN if you forget it.
         Write it down or save it somewhere safe — it will not be shown again.
       </p>
 
       <div id="recovery-code-display" style="font-family: monospace; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; text-align: center; background: var(--color-primary-light); color: var(--color-primary); padding: 18px 12px; border-radius: 12px; margin: 20px 0; user-select: all;"></div>
 
-      <button type="button" class="btn btn-secondary btn-block" id="copy-recovery-btn" style="margin-bottom: 16px;">Copy code</button>
+      <button type="button" class="btn btn-secondary btn-block" id="copy-recovery-btn" style="margin-bottom: 16px;" data-i18n="auth.copyCode">Copy code</button>
 
       <label class="checkbox-row">
         <input type="checkbox" id="recovery-saved-checkbox" />
-        <span>I've saved my recovery code somewhere safe</span>
+        <span data-i18n="auth.savedRecoveryCode">I've saved my recovery code somewhere safe</span>
       </label>
 
-      <button type="button" class="btn btn-primary btn-block" id="recovery-continue-btn" disabled style="margin-top: 12px;">Continue →</button>
+      <button type="button" class="btn btn-primary btn-block" id="recovery-continue-btn" disabled style="margin-top: 12px;" data-i18n="auth.continueArrow">Continue →</button>
     </div>
 
   </div>
