@@ -4,8 +4,9 @@ let searchTerm = '';
 let pendingDeleteId = null;
 let confirmModal = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-  requireSetup();
+document.addEventListener('DOMContentLoaded', async () => {
+  const allowed = await requireSetup();
+  if (!allowed) return; // already redirecting to login/setup — don't render stale data
 
   const params = new URLSearchParams(window.location.search);
   if (params.get('saved') === '1') {
@@ -88,10 +89,10 @@ function renderList() {
     const row = document.createElement('div');
     row.className = 'txn-row';
     row.innerHTML = `
-      <div class="txn-icon txn-icon--${t.type}">${t.type === 'income' ? '🟢' : '🔴'}</div>
+      <div class="txn-icon txn-icon--${t.type}">${t.type === 'income' ? '0®8' : '9è2'}</div>
       <div class="txn-info">
         <div class="txn-desc">${escapeHtml(t.description)}</div>
-        <div class="txn-meta">${escapeHtml(t.category)} · ${escapeHtml(t.paymentMethod)} · ${formatDate(t.date)}</div>
+        <div class="txn-meta">${escapeHtml(t.category)} ¡¤ ${escapeHtml(t.paymentMethod)} ¡¤ ${formatDate(t.date)}</div>
       </div>
       <div class="txn-amount txn-amount--${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</div>
       <div class="txn-actions">
