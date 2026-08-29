@@ -71,7 +71,7 @@ const CURRENCIES = [
 /**
  * Shape of the data saved under STORAGE_KEY:
  * {
- *   account: { name, email, passwordHash, country },
+ *   account: { name, username, pinHash, country, recoveryCodeHash },
  *   session: { loggedIn },
  *   business: { name, type, currency },
  *   transactions: [ { id, type, amount, description, category, paymentMethod, date, createdAt } ],
@@ -83,9 +83,10 @@ function getDefaultData() {
   return {
     account: {
       name: '',
-      email: '',
-      passwordHash: '',
-      country: ''
+      username: '',
+      pinHash: '',
+      country: '',
+      recoveryCodeHash: ''
     },
     session: {
       loggedIn: false
@@ -136,10 +137,11 @@ function persistData(data) {
 /* ---------- Account & session ---------- */
 
 /**
- * Lightweight non-cryptographic hash so we don't store passwords in
- * plain text. This is a client-only demo (no server), so it's not a
- * substitute for real password hashing on a backend — good enough to
- * avoid an obvious plaintext string in localStorage, not for production auth.
+ * Lightweight non-cryptographic hash so we don't store the PIN or
+ * recovery code in plain text. This is a client-only demo (no server),
+ * so it's not a substitute for real password hashing on a backend —
+ * good enough to avoid an obvious plaintext string in localStorage,
+ * not for production auth.
  */
 function simpleHash(str) {
   let hash = 5381;
@@ -149,38 +151,80 @@ function simpleHash(str) {
   return (hash >>> 0).toString(36);
 }
 
+/** Generates a human-friendly one-time recovery code, e.g. "7K2X-9QRM". */
+function generateRecoveryCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I to avoid ambiguity
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    if (i === 4) code += '-';
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
 function isAccountCreated() {
   const data = loadData();
-  return Boolean(data.account.email && data.account.passwordHash);
+  return Boolean(data.account.username && data.account.pinHash);
+}
+
+function isUsernameTaken(username) {
+  const data = loadData();
+  return data.account.username === username.toLowerCase().trim();
 }
 
 function getAccount() {
   return loadData().account;
 }
 
-function createAccount({ name, email, password, country, currency }) {
+/** Creates the (single, on-device) account and returns the one-time recovery code to show the user. */
+function createAccount({ name, username, pin, country, currency }) {
   const data = loadData();
+  const recoveryCode = generateRecoveryCode();
   data.account = {
     name,
-    email: email.toLowerCase().trim(),
-    passwordHash: simpleHash(password),
-    country
+    username: username.toLowerCase().trim(),
+    pinHash: simpleHash(pin),
+    country,
+    recoveryCodeHash: simpleHash(recoveryCode)
   };
   if (currency) data.business.currency = currency;
   data.session.loggedIn = true;
   persistData(data);
-  return true;
+  return recoveryCode;
 }
 
-function login(email, password) {
+function login(username, pin) {
   const data = loadData();
-  const normalizedEmail = email.toLowerCase().trim();
-  if (data.account.email === normalizedEmail && data.account.passwordHash === simpleHash(password)) {
+  const normalizedUsername = username.toLowerCase().trim();
+  if (data.account.username === normalizedUsername && data.account.pinHash === simpleHash(pin)) {
     data.session.loggedIn = true;
     persistData(data);
     return true;
   }
   return false;
+}
+
+/**
+ * Verifies username + recovery code, sets a new PIN, rotates the
+ * recovery code (the old one is now dead), and returns the new code —
+ * or a falsy value if the username/code pair didn't match.
+ */
+function resetPinWithRecoveryCode(username, code, newPin) {
+  const data = loadData();
+  const normalizedUsername = username.toLowerCase().trim();
+  const normalizedCode = code.toUpperCase().trim();
+  if (
+    data.account.username !== normalizedUsername ||
+    data.account.recoveryCodeHash !== simpleHash(normalizedCode)
+  ) {
+    return null;
+  }
+  const newRecoveryCode = generateRecoveryCode();
+  data.account.pinHash = simpleHash(newPin);
+  data.account.recoveryCodeHash = simpleHash(newRecoveryCode);
+  data.session.loggedIn = false; // make them log in again with the new PIN
+  persistData(data);
+  return newRecoveryCode;
 }
 
 function logout() {
