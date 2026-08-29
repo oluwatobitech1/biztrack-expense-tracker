@@ -81,7 +81,7 @@ function getDefaultBusiness() {
   return { name: '', type: '', currency: 'NGN', logo: null };
 }
 function getDefaultSettings() {
-  return { theme: 'light', language: 'en', balanceHidden: false };
+  return { theme: 'light', language: 'en' };
 }
 function getDefaultAccount() {
   return { name: '', username: '', country: '', currency: 'NGN', pinHash: null, recoveryCodeHash: null };
@@ -183,25 +183,6 @@ function isAccountCreated() {
 
 function getAccount() {
   return _cache.account;
-}
-
-/**
- * Updates fields on the local account (currently just `username` from
- * Settings). Synchronous and called without `await` from settings.js,
- * matching that call site. Returns { success, error }.
- */
-function saveAccount(updates) {
-  const next = { ...updates };
-  if (next.username !== undefined) {
-    const trimmed = (next.username || '').trim();
-    if (!/^[a-zA-Z0-9_.]{3,}$/.test(trimmed)) {
-      return { success: false, error: 'Username must be at least 3 characters, using only letters, numbers, underscores, or periods.' };
-    }
-    next.username = trimmed;
-  }
-  _cache.account = { ..._cache.account, ...next };
-  writeJSON(LS_ACCOUNT_KEY, _cache.account);
-  return { success: true };
 }
 
 /**
