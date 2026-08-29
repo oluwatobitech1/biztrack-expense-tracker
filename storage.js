@@ -81,7 +81,7 @@ function getDefaultBusiness() {
   return { name: '', type: '', currency: 'NGN', logo: null };
 }
 function getDefaultSettings() {
-  return { theme: 'light', language: 'en' };
+  return { theme: 'light', language: 'en', balanceHidden: false };
 }
 function getDefaultAccount() {
   return { name: '', username: '', country: '', currency: 'NGN', pinHash: null, recoveryCodeHash: null };
