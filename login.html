@@ -20,32 +20,33 @@
   <div class="setup-shell">
     <div class="card setup-card auth-card">
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <span class="auth-badge"><span class="dot"></span> Welcome back</span>
-      <h1>Sign in to BizTrack.</h1>
-      <p class="auth-sub">Pick up right where you left off.</p>
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.welcomeBack">Welcome back</span></span>
+      <h1 data-i18n="auth.signInTitle">Sign in to BizTrack.</h1>
+      <p class="auth-sub" data-i18n="auth.signInSub">Pick up right where you left off.</p>
 
       <div class="auth-error-banner" id="login-error-banner"></div>
 
       <form id="login-form" novalidate>
         <div class="form-group">
-          <label class="form-label" for="login-username-input">Username</label>
-          <input type="text" id="login-username-input" class="form-input" placeholder="Enter your username" autocomplete="username" />
+          <label class="form-label" for="login-username-input" data-i18n="auth.usernameLabel">Username</label>
+          <input type="text" id="login-username-input" class="form-input" placeholder="Enter your username" data-i18n-placeholder="auth.usernamePlaceholderLogin" autocomplete="username" />
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="login-pin-input">PIN</label>
-          <input type="password" id="login-pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" />
+          <label class="form-label" for="login-pin-input" data-i18n="auth.pinLabel">PIN</label>
+          <input type="password" id="login-pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" data-i18n-placeholder="auth.pinPlaceholder" />
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block" id="login-submit-btn">Sign in →</button>
+        <button type="submit" class="btn btn-primary btn-block" id="login-submit-btn" data-i18n="auth.signInBtn">Sign in →</button>
       </form>
 
-      <p class="auth-footer-link"><a href="recover.html">Forgot your PIN?</a></p>
-      <p class="auth-footer-link">Don't have an account? <a href="signup.html">Create one</a></p>
+      <p class="auth-footer-link"><a href="recover.html" data-i18n="auth.forgotPin">Forgot your PIN?</a></p>
+      <p class="auth-footer-link"><span data-i18n="auth.noAccount">Don't have an account?</span> <a href="signup.html" data-i18n="auth.createOne">Create one</a></p>
     </div>
   </div>
 
   <script src="storage.js"></script>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
   <script src="login.js"></script>
   <script src="animate.js"></script>
