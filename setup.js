@@ -26,7 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     nameError.classList.remove('is-visible');
     nameInput.classList.remove('is-invalid');
-    saveBusiness({ name });
+    const saved = saveBusiness({ name });
+
+    if (!saved) {
+      if (typeof showToast === 'function') {
+        showToast("Couldn't save your business name. Check your browser's storage settings and try again.", 'error');
+      }
+      return;
+    }
 
     step1.classList.remove('is-active');
     step2.classList.add('is-active');
@@ -50,7 +57,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   finishBtn.addEventListener('click', () => {
     if (!selectedType) return;
-    saveBusiness({ type: selectedType, currency: 'NGN' });
+
+    const saved = saveBusiness({ type: selectedType, currency: 'NGN' });
+
+    if (!saved || !isSetupComplete()) {
+      // Save failed or didn't stick (e.g. private browsing / storage blocked) —
+      // tell the user instead of silently bouncing them back to this page.
+      if (typeof showToast === 'function') {
+        showToast("Couldn't save your business info. Check your browser's storage settings and try again.", 'error');
+      }
+      return;
+    }
+
     dot2.classList.add('is-complete');
     window.location.href = 'dashboard.html';
   });
