@@ -1,16 +1,15 @@
 /**
  * storage.js
- * BizTrack's entire data layer — pure localStorage, single account per
- * device, unlocked with a PIN (no backend, no Supabase).
- *
- * DESIGN NOTE: everything here is synchronous under the hood, but the
- * functions keep their `async`/`await`-friendly signatures so existing
- * call sites (login.js, signup.js, setup.js, app pages) that already
- * `await` these calls keep working without changes.
+ * BizTrack's entire data layer. Every read/write to localStorage goes
+ * through here so the UI code never touches localStorage directly.
  */
+
+const STORAGE_KEY = 'biztrack_data';
 
 /**
  * Countries BizTrack supports at signup, each mapped to its currency.
+ * Selecting a country auto-fills the currency used across the app.
+ * Covers every major region so the app works for any business, anywhere.
  */
 const CURRENCIES = [
   // Africa
@@ -24,9 +23,11 @@ const CURRENCIES = [
   { country: 'Egypt', code: 'EGP', symbol: 'E\u00A3', label: 'Egyptian Pound (E\u00A3)' },
   { country: 'Morocco', code: 'MAD', symbol: 'MAD', label: 'Moroccan Dirham (MAD)' },
   { country: 'Ethiopia', code: 'ETB', symbol: 'Br', label: 'Ethiopian Birr (Br)' },
+  // North America
   { country: 'United States', code: 'USD', symbol: '$', label: 'US Dollar ($)' },
   { country: 'Canada', code: 'CAD', symbol: 'CA$', label: 'Canadian Dollar (CA$)' },
   { country: 'Mexico', code: 'MXN', symbol: 'MX$', label: 'Mexican Peso (MX$)' },
+  // Europe
   { country: 'United Kingdom', code: 'GBP', symbol: '\u00A3', label: 'British Pound (\u00A3)' },
   { country: 'Germany', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
   { country: 'France', code: 'EUR', symbol: '\u20AC', label: 'Euro (\u20AC)' },
@@ -39,6 +40,7 @@ const CURRENCIES = [
   { country: 'Norway', code: 'NOK', symbol: 'kr', label: 'Norwegian Krone (kr)' },
   { country: 'Poland', code: 'PLN', symbol: 'z\u0142', label: 'Polish Z\u0142oty (z\u0142)' },
   { country: 'Turkey', code: 'TRY', symbol: '\u20BA', label: 'Turkish Lira (\u20BA)' },
+  // Asia-Pacific
   { country: 'India', code: 'INR', symbol: '\u20B9', label: 'Indian Rupee (\u20B9)' },
   { country: 'China', code: 'CNY', symbol: '\u00A5', label: 'Chinese Yuan (\u00A5)' },
   { country: 'Japan', code: 'JPY', symbol: '\u00A5', label: 'Japanese Yen (\u00A5)' },
@@ -52,307 +54,203 @@ const CURRENCIES = [
   { country: 'Bangladesh', code: 'BDT', symbol: '\u09F3', label: 'Bangladeshi Taka (\u09F3)' },
   { country: 'Australia', code: 'AUD', symbol: 'A$', label: 'Australian Dollar (A$)' },
   { country: 'New Zealand', code: 'NZD', symbol: 'NZ$', label: 'New Zealand Dollar (NZ$)' },
+  // Middle East
   { country: 'United Arab Emirates', code: 'AED', symbol: 'AED', label: 'UAE Dirham (AED)' },
   { country: 'Saudi Arabia', code: 'SAR', symbol: 'SAR', label: 'Saudi Riyal (SAR)' },
   { country: 'Qatar', code: 'QAR', symbol: 'QAR', label: 'Qatari Riyal (QAR)' },
   { country: 'Israel', code: 'ILS', symbol: '\u20AA', label: 'Israeli Shekel (\u20AA)' },
+  // South America
   { country: 'Brazil', code: 'BRL', symbol: 'R$', label: 'Brazilian Real (R$)' },
   { country: 'Argentina', code: 'ARS', symbol: 'AR$', label: 'Argentine Peso (AR$)' },
   { country: 'Colombia', code: 'COP', symbol: 'COL$', label: 'Colombian Peso (COL$)' },
   { country: 'Chile', code: 'CLP', symbol: 'CL$', label: 'Chilean Peso (CL$)' },
+  // Fallback
   { country: 'Other', code: 'USD', symbol: '$', label: 'US Dollar ($)' }
 ];
 
-/* ---------- Storage keys ---------- */
+/**
+ * Shape of the data saved under STORAGE_KEY:
+ * {
+ *   account: { name, email, passwordHash, country },
+ *   session: { loggedIn },
+ *   business: { name, type, currency },
+ *   transactions: [ { id, type, amount, description, category, paymentMethod, date, createdAt } ],
+ *   settings: { theme }
+ * }
+ */
 
-const LS_ACCOUNT_KEY = 'biztrack_account_v1';
-const LS_BUSINESS_KEY = 'biztrack_business_v1';
-const LS_TRANSACTIONS_KEY = 'biztrack_transactions_v1';
-const LS_SETTINGS_KEY = 'biztrack_settings_v1';
-// Session-only: whether the PIN has been entered correctly this browser
-// session. Using sessionStorage (not localStorage) means the app
-// re-locks itself whenever the tab/browser is closed and reopened —
-// same feel as PalmPay/OPay's PIN lock screen.
-const SS_UNLOCKED_KEY = 'biztrack_unlocked_v1';
-
-/* ---------- In-memory cache ---------- */
-
-function getDefaultBusiness() {
-  return { name: '', type: '', currency: 'NGN', logo: null };
+function getDefaultData() {
+  return {
+    account: {
+      name: '',
+      email: '',
+      passwordHash: '',
+      country: ''
+    },
+    session: {
+      loggedIn: false
+    },
+    business: {
+      name: '',
+      type: '',
+      currency: 'NGN',
+      logo: null
+    },
+    transactions: [],
+    settings: {
+      theme: 'light',
+      language: 'en'
+    }
+  };
 }
-function getDefaultSettings() {
-  return { theme: 'light', language: 'en' };
-}
-function getDefaultAccount() {
-  return { name: '', username: '', country: '', currency: 'NGN', pinHash: null, recoveryCodeHash: null };
-}
 
-const _cache = {
-  loaded: false,
-  account: getDefaultAccount(),
-  business: getDefaultBusiness(),
-  transactions: [],
-  settings: getDefaultSettings()
-};
-
-function readJSON(key, fallback) {
+function loadData() {
   try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    return JSON.parse(raw);
-  } catch (e) {
-    console.error('BizTrack: failed to read ' + key, e);
-    return fallback;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return getDefaultData();
+    const parsed = JSON.parse(raw);
+    // Guard against partially-shaped data from older versions.
+    return {
+      account: { ...getDefaultData().account, ...(parsed.account || {}) },
+      session: { ...getDefaultData().session, ...(parsed.session || {}) },
+      business: { ...getDefaultData().business, ...(parsed.business || {}) },
+      transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
+      settings: { ...getDefaultData().settings, ...(parsed.settings || {}) }
+    };
+  } catch (err) {
+    console.error('BizTrack: failed to read stored data, starting fresh.', err);
+    return getDefaultData();
   }
 }
 
-function writeJSON(key, value) {
+function persistData(data) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     return true;
-  } catch (e) {
-    console.error('BizTrack: failed to save ' + key, e);
+  } catch (err) {
+    console.error('BizTrack: failed to save data.', err);
     return false;
   }
 }
 
-/**
- * Loads everything from localStorage into the in-memory cache. Call
- * this once per page before any getters are used — login.js/signup.js
- * do it directly, and app pages do it via requireSetup() in app.js.
- * Safe to call multiple times; only re-reads if not already loaded
- * for this page load (pass `true` to force a re-read).
- */
-async function bootstrapData(force) {
-  if (_cache.loaded && !force) return;
-
-  _cache.account = readJSON(LS_ACCOUNT_KEY, getDefaultAccount());
-  _cache.business = readJSON(LS_BUSINESS_KEY, getDefaultBusiness());
-  _cache.transactions = readJSON(LS_TRANSACTIONS_KEY, []);
-  _cache.settings = readJSON(LS_SETTINGS_KEY, getDefaultSettings());
-  _cache.loaded = true;
-}
-
-function genId() {
-  return 'id_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
-
-/** SHA-256 hashes a PIN (with a static salt) so it's never stored in plain text. */
-async function hashPin(pin) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode('biztrack_pin_salt_' + pin);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-/** Strips spaces/dashes and uppercases a recovery code so formatting doesn't matter when checking it. */
-function normalizeRecoveryCode(code) {
-  return (code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-}
-
-/** SHA-256 hashes a (normalized) recovery code so it's never stored in plain text. */
-async function hashRecoveryCode(code) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode('biztrack_recovery_salt_' + normalizeRecoveryCode(code));
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-/** Generates a random, human-typeable recovery code like "AB3CD-EF4GH" (no 0/O/1/I to avoid mix-ups). */
-function genRecoveryCode() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  const randomValues = crypto.getRandomValues(new Uint8Array(10));
-  let raw = '';
-  for (let i = 0; i < 10; i++) {
-    raw += chars[randomValues[i] % chars.length];
-  }
-  return raw.slice(0, 5) + '-' + raw.slice(5);
-}
-
 /* ---------- Account & session ---------- */
 
-/** Whether an account (name + PIN) has ever been created on this device. */
+/**
+ * Lightweight non-cryptographic hash so we don't store passwords in
+ * plain text. This is a client-only demo (no server), so it's not a
+ * substitute for real password hashing on a backend — good enough to
+ * avoid an obvious plaintext string in localStorage, not for production auth.
+ */
+function simpleHash(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return (hash >>> 0).toString(36);
+}
+
 function isAccountCreated() {
-  const account = readJSON(LS_ACCOUNT_KEY, null);
-  return Boolean(account && account.pinHash);
+  const data = loadData();
+  return Boolean(data.account.email && data.account.passwordHash);
 }
 
 function getAccount() {
-  return _cache.account;
+  return loadData().account;
 }
 
-/**
- * Creates the on-device account with a PIN instead of an email/password.
- * `pin` is a plain string of digits (e.g. "4821"); it's hashed before
- * being stored. Returns { success, error }.
- */
-async function createAccount({ name, username, country, currency, pin }) {
-  if (!pin || pin.length < 4) {
-    return { success: false, error: 'Please set a PIN of at least 4 digits.' };
-  }
-
-  const pinHash = await hashPin(pin);
-  const recoveryCode = genRecoveryCode();
-  const recoveryCodeHash = await hashRecoveryCode(recoveryCode);
-
-  const account = {
-    name: name || '',
-    username: username || '',
-    country: country || '',
-    currency: currency || 'NGN',
-    pinHash,
-    recoveryCodeHash
+function createAccount({ name, email, password, country, currency }) {
+  const data = loadData();
+  data.account = {
+    name,
+    email: email.toLowerCase().trim(),
+    passwordHash: simpleHash(password),
+    country
   };
-
-  writeJSON(LS_ACCOUNT_KEY, account);
-  if (!readJSON(LS_BUSINESS_KEY, null)) {
-    writeJSON(LS_BUSINESS_KEY, { ...getDefaultBusiness(), currency: account.currency });
-  }
-  if (!readJSON(LS_SETTINGS_KEY, null)) {
-    writeJSON(LS_SETTINGS_KEY, getDefaultSettings());
-  }
-  if (!readJSON(LS_TRANSACTIONS_KEY, null)) {
-    writeJSON(LS_TRANSACTIONS_KEY, []);
-  }
-
-  sessionStorage.setItem(SS_UNLOCKED_KEY, '1');
-  await bootstrapData(true);
-  // recoveryCode is only ever available here, right after signup — it's
-  // not retrievable later since only its hash is stored.
-  return { success: true, recoveryCode };
+  if (currency) data.business.currency = currency;
+  data.session.loggedIn = true;
+  persistData(data);
+  return true;
 }
 
-/**
- * Verifies a PIN against the stored account and unlocks the session if
- * it matches. Returns { success, error }.
- */
-async function login(pin) {
-  const account = readJSON(LS_ACCOUNT_KEY, null);
-  if (!account || !account.pinHash) {
-    return { success: false, error: 'No account found on this device.' };
+function login(email, password) {
+  const data = loadData();
+  const normalizedEmail = email.toLowerCase().trim();
+  if (data.account.email === normalizedEmail && data.account.passwordHash === simpleHash(password)) {
+    data.session.loggedIn = true;
+    persistData(data);
+    return true;
   }
-
-  const enteredHash = await hashPin(pin);
-  if (enteredHash !== account.pinHash) {
-    return { success: false, error: 'Incorrect PIN.' };
-  }
-
-  sessionStorage.setItem(SS_UNLOCKED_KEY, '1');
-  await bootstrapData(true);
-  return { success: true };
+  return false;
 }
 
-/**
- * Verifies a recovery code and, if it matches, sets a new PIN — without
- * touching the business, transactions, or settings already saved.
- * Returns { success, error }.
- */
-async function resetPinWithRecoveryCode(code, newPin) {
-  const account = readJSON(LS_ACCOUNT_KEY, null);
-  if (!account || !account.recoveryCodeHash) {
-    return { success: false, error: 'No account found on this device.' };
-  }
-  if (!newPin || newPin.length < 4) {
-    return { success: false, error: 'Please set a PIN of at least 4 digits.' };
-  }
-
-  const enteredHash = await hashRecoveryCode(code);
-  if (enteredHash !== account.recoveryCodeHash) {
-    return { success: false, error: 'That recovery code doesn\u2019t match.' };
-  }
-
-  account.pinHash = await hashPin(newPin);
-  writeJSON(LS_ACCOUNT_KEY, account);
-
-  sessionStorage.setItem(SS_UNLOCKED_KEY, '1');
-  await bootstrapData(true);
-  return { success: true };
+function logout() {
+  const data = loadData();
+  data.session.loggedIn = false;
+  persistData(data);
 }
 
-/** Locks the app again (data stays on the device). */
-async function logout() {
-  sessionStorage.removeItem(SS_UNLOCKED_KEY);
-  _cache.loaded = false;
-}
-
-async function isLoggedIn() {
-  return Boolean(sessionStorage.getItem(SS_UNLOCKED_KEY)) && isAccountCreated();
-}
-
-/** Wipes everything on this device — account, PIN, business, transactions, settings. Used for "Forgot PIN". */
-async function resetApp() {
-  localStorage.removeItem(LS_ACCOUNT_KEY);
-  localStorage.removeItem(LS_BUSINESS_KEY);
-  localStorage.removeItem(LS_TRANSACTIONS_KEY);
-  localStorage.removeItem(LS_SETTINGS_KEY);
-  sessionStorage.removeItem(SS_UNLOCKED_KEY);
-  _cache.loaded = false;
-  _cache.account = getDefaultAccount();
-  _cache.business = getDefaultBusiness();
-  _cache.transactions = [];
-  _cache.settings = getDefaultSettings();
+function isLoggedIn() {
+  return loadData().session.loggedIn;
 }
 
 /* ---------- Business ---------- */
 
 function isSetupComplete() {
-  return Boolean(_cache.business.name && _cache.business.type);
+  const data = loadData();
+  return Boolean(data.business.name && data.business.type);
 }
 
 function getBusiness() {
-  return _cache.business;
+  return loadData().business;
 }
 
-async function saveBusiness(business) {
-  _cache.business = { ..._cache.business, ...business };
-  return writeJSON(LS_BUSINESS_KEY, _cache.business);
+function saveBusiness(business) {
+  const data = loadData();
+  data.business = { ...data.business, ...business };
+  return persistData(data);
 }
 
 /* ---------- Transactions ---------- */
 
 function getTransactions() {
-  return _cache.transactions.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  return loadData().transactions.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
-async function saveTransaction(transaction) {
+function generateId() {
+  return 'txn_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+}
+
+function saveTransaction(transaction) {
+  const data = loadData();
   const newTransaction = {
-    id: genId(),
-    type: transaction.type,
-    amount: transaction.amount,
-    description: transaction.description,
-    category: transaction.category,
-    paymentMethod: transaction.paymentMethod,
-    date: transaction.date,
-    createdAt: new Date().toISOString()
+    id: generateId(),
+    createdAt: new Date().toISOString(),
+    ...transaction
   };
-  _cache.transactions.push(newTransaction);
-  writeJSON(LS_TRANSACTIONS_KEY, _cache.transactions);
+  data.transactions.push(newTransaction);
+  persistData(data);
   return newTransaction;
 }
 
-async function updateTransaction(id, updates) {
-  const index = _cache.transactions.findIndex((t) => t.id === id);
+function updateTransaction(id, updates) {
+  const data = loadData();
+  const index = data.transactions.findIndex((t) => t.id === id);
   if (index === -1) return null;
-
-  const updated = { ..._cache.transactions[index], ...updates };
-  _cache.transactions[index] = updated;
-  writeJSON(LS_TRANSACTIONS_KEY, _cache.transactions);
-  return updated;
+  data.transactions[index] = { ...data.transactions[index], ...updates };
+  persistData(data);
+  return data.transactions[index];
 }
 
-async function deleteTransaction(id) {
-  const before = _cache.transactions.length;
-  _cache.transactions = _cache.transactions.filter((t) => t.id !== id);
-  writeJSON(LS_TRANSACTIONS_KEY, _cache.transactions);
-  return _cache.transactions.length < before;
+function deleteTransaction(id) {
+  const data = loadData();
+  const before = data.transactions.length;
+  data.transactions = data.transactions.filter((t) => t.id !== id);
+  persistData(data);
+  return data.transactions.length < before;
 }
 
 function getTransactionById(id) {
-  return _cache.transactions.find((t) => t.id === id) || null;
+  return loadData().transactions.find((t) => t.id === id) || null;
 }
 
 /* ---------- Date range filtering ---------- */
@@ -376,7 +274,7 @@ function getTransactionsByDateRange(range) {
       case 'today':
         return txnDate.getTime() === today.getTime();
       case 'week': {
-        const dayOfWeek = today.getDay();
+        const dayOfWeek = today.getDay(); // 0 = Sunday
         const diffToMonday = (dayOfWeek + 6) % 7;
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - diffToMonday);
@@ -395,14 +293,18 @@ function getTransactionsByDateRange(range) {
   });
 }
 
-/* ---------- Calculations (pure, unchanged) ---------- */
+/* ---------- Calculations ---------- */
 
 function calculateIncome(transactions) {
-  return transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0);
+  return transactions
+    .filter((t) => t.type === 'income')
+    .reduce((sum, t) => sum + Number(t.amount), 0);
 }
 
 function calculateExpenses(transactions) {
-  return transactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0);
+  return transactions
+    .filter((t) => t.type === 'expense')
+    .reduce((sum, t) => sum + Number(t.amount), 0);
 }
 
 function calculateProfit(transactions) {
@@ -423,12 +325,13 @@ function getBreakdownByCategory(transactions, type) {
 /* ---------- Settings ---------- */
 
 function getSettings() {
-  return _cache.settings;
+  return loadData().settings;
 }
 
-async function saveSettings(settings) {
-  _cache.settings = { ..._cache.settings, ...settings };
-  return writeJSON(LS_SETTINGS_KEY, _cache.settings);
+function saveSettings(settings) {
+  const data = loadData();
+  data.settings = { ...data.settings, ...settings };
+  return persistData(data);
 }
 
 /* ---------- Export ---------- */
@@ -475,12 +378,6 @@ function todayISO() {
 
 /* ---------- Clear all data ---------- */
 
-/** Deletes the business, all transactions, and settings — keeps the account/PIN itself. */
-async function clearAllData() {
-  _cache.business = getDefaultBusiness();
-  _cache.transactions = [];
-  _cache.settings = getDefaultSettings();
-  writeJSON(LS_BUSINESS_KEY, _cache.business);
-  writeJSON(LS_TRANSACTIONS_KEY, _cache.transactions);
-  writeJSON(LS_SETTINGS_KEY, _cache.settings);
+function clearAllData() {
+  localStorage.removeItem(STORAGE_KEY);
 }
