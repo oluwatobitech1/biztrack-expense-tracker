@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  requireSetup();
+  if (!requireSetup()) return;
 
   document.querySelectorAll('[data-report-range]').forEach((chip) => {
     chip.addEventListener('click', () => {
