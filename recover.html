@@ -22,65 +22,66 @@
     <!-- Step 1: verify identity with username + recovery code, set new PIN -->
     <div class="card setup-card auth-card" id="recover-panel">
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <span class="auth-badge"><span class="dot"></span> Account recovery</span>
-      <h1>Reset your PIN.</h1>
-      <p class="auth-sub">Enter your username and the recovery code you saved when you created your account.</p>
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.accountRecovery">Account recovery</span></span>
+      <h1 data-i18n="auth.recoverTitle">Reset your PIN.</h1>
+      <p class="auth-sub" data-i18n="auth.recoverSub">Enter your username and the recovery code you saved when you created your account.</p>
 
       <div class="auth-error-banner" id="recover-error-banner"></div>
 
       <form id="recover-form" novalidate>
         <div class="form-group">
-          <label class="form-label" for="recover-username-input">Username</label>
-          <input type="text" id="recover-username-input" class="form-input" placeholder="Enter your username" autocomplete="username" />
+          <label class="form-label" for="recover-username-input" data-i18n="auth.usernameLabel">Username</label>
+          <input type="text" id="recover-username-input" class="form-input" placeholder="Enter your username" data-i18n-placeholder="auth.usernamePlaceholderLogin" autocomplete="username" />
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="recover-code-input">Recovery code</label>
+          <label class="form-label" for="recover-code-input" data-i18n="auth.recoveryCodeLabel">Recovery code</label>
           <input type="text" id="recover-code-input" class="form-input" placeholder="XXXX-XXXX-XXXX" autocomplete="off" style="text-transform:uppercase; font-family: monospace; letter-spacing: 1px;" />
         </div>
 
         <div class="form-row-2">
           <div class="form-group">
-            <label class="form-label" for="new-pin-input">New PIN</label>
+            <label class="form-label" for="new-pin-input" data-i18n="auth.newPinLabel">New PIN</label>
             <input type="password" id="new-pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" />
           </div>
           <div class="form-group">
-            <label class="form-label" for="new-pin-confirm-input">Confirm new PIN</label>
+            <label class="form-label" for="new-pin-confirm-input" data-i18n="auth.newPinConfirmLabel">Confirm new PIN</label>
             <input type="password" id="new-pin-confirm-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" />
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block" id="recover-submit-btn">Reset PIN →</button>
+        <button type="submit" class="btn btn-primary btn-block" id="recover-submit-btn" data-i18n="auth.resetPinBtn">Reset PIN →</button>
       </form>
 
-      <p class="auth-footer-link"><a href="login.html">Back to sign in</a></p>
+      <p class="auth-footer-link"><a href="login.html" data-i18n="auth.backToSignIn">Back to sign in</a></p>
     </div>
 
     <!-- Step 2: show the new (rotated) recovery code -->
     <div class="card setup-card auth-card" id="new-recovery-panel" style="display:none;">
       <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <span class="auth-badge"><span class="dot"></span> PIN reset</span>
-      <h1>Your new recovery code</h1>
-      <p class="auth-sub">
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.pinReset">PIN reset</span></span>
+      <h1 data-i18n="auth.yourNewRecoveryCode">Your new recovery code</h1>
+      <p class="auth-sub" data-i18n="auth.newRecoveryCodeWarning">
         Your PIN has been reset. Your old recovery code no longer works — here is your new one.
         Save it somewhere safe, since it won't be shown again.
       </p>
 
       <div id="new-recovery-code-display" style="font-family: monospace; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; text-align: center; background: var(--color-primary-light); color: var(--color-primary); padding: 18px 12px; border-radius: 12px; margin: 20px 0; user-select: all;"></div>
 
-      <button type="button" class="btn btn-secondary btn-block" id="copy-new-recovery-btn" style="margin-bottom: 16px;">Copy code</button>
+      <button type="button" class="btn btn-secondary btn-block" id="copy-new-recovery-btn" style="margin-bottom: 16px;" data-i18n="auth.copyCode">Copy code</button>
 
       <label class="checkbox-row">
         <input type="checkbox" id="new-recovery-saved-checkbox" />
-        <span>I've saved my new recovery code somewhere safe</span>
+        <span data-i18n="auth.savedNewRecoveryCode">I've saved my new recovery code somewhere safe</span>
       </label>
 
-      <button type="button" class="btn btn-primary btn-block" id="new-recovery-continue-btn" disabled style="margin-top: 12px;">Go to sign in →</button>
+      <button type="button" class="btn btn-primary btn-block" id="new-recovery-continue-btn" disabled style="margin-top: 12px;" data-i18n="auth.goToSignIn">Go to sign in →</button>
     </div>
 
   </div>
 
   <script src="storage.js"></script>
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
   <script src="recover.js"></script>
   <script src="animate.js"></script>
