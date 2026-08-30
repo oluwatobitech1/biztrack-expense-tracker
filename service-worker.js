@@ -14,13 +14,12 @@
  * cache is only used as a fallback when there's no network.
  */
 
-const CACHE_NAME = 'biztrack-shell-v2';
+const CACHE_NAME = 'biztrack-shell-v3';
 
 const APP_SHELL = [
   'index.html',
   'login.html',
   'signup.html',
-  'setup.html',
   'dashboard.html',
   'transactions.html',
   'add-transaction.html',
@@ -40,7 +39,6 @@ const APP_SHELL = [
   'install.js',
   'login.js',
   'signup.js',
-  'setup.js',
   'dashboard.js',
   'transactions.js',
   'transaction-form.js',
@@ -53,7 +51,6 @@ const APP_SHELL = [
   'icons/icon-512.png',
   'icons/favicon-16.png',
   'icons/favicon-32.png',
-  'icons/favicon-48.png',
   'icons/favicon.ico'
 ];
 
