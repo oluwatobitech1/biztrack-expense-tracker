@@ -5,6 +5,17 @@
  * navigation, and page guards.
  */
 
+// Register the service worker (enables offline support and lets the
+// browser offer the "Install app" prompt). Safe no-op in browsers/
+// contexts that don't support it (e.g. some in-app browsers).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {
+      // Non-fatal: the app still works fully online without it.
+    });
+  });
+}
+
 function formatCurrency(amount) {
   const business = getBusiness();
   const currencyCode = business.currency || 'NGN';
@@ -38,18 +49,13 @@ function setGreeting(el) {
 }
 
 /**
- * Redirect to login if no session, or to setup if the business profile is
- * incomplete. Call on every app page. Returns true if the page is clear to
- * render, false if a redirect was triggered (so the caller can bail out
- * instead of rendering with no data).
+ * Redirect to login if there's no active session. Call on every app page.
+ * Returns true if the page is clear to render, false if a redirect was
+ * triggered (so the caller can bail out instead of rendering with no data).
  */
-function requireSetup() {
+function requireLogin() {
   if (!isLoggedIn()) {
     window.location.href = 'login.html';
-    return false;
-  }
-  if (!isSetupComplete()) {
-    window.location.href = 'setup.html';
     return false;
   }
   return true;
