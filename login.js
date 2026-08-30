@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (isLoggedIn()) {
-    window.location.href = isSetupComplete() ? 'dashboard.html' : 'setup.html';
+    window.location.href = 'dashboard.html';
     return;
   }
 
@@ -51,5 +51,5 @@ function handleLogin(e) {
     return;
   }
 
-  window.location.href = isSetupComplete() ? 'dashboard.html' : 'setup.html';
+  window.location.href = 'dashboard.html';
 }
