@@ -34,11 +34,7 @@
         if (typeof bootstrapData === 'function') {
           await bootstrapData();
         }
-        if (!isSetupComplete()) {
-          window.location.replace('setup.html');
-        } else {
-          window.location.replace('dashboard.html');
-        }
+        window.location.replace('dashboard.html');
       } else {
         window.location.replace('login.html');
       }
