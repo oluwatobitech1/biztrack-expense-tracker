@@ -1,228 +1,143 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Already signed in? Skip straight past signup.
-  if (isLoggedIn()) {
-    window.location.href = 'dashboard.html';
-    return;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create your account — BizTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
+  <link rel="shortcut icon" href="icons/favicon.ico" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
 
-  const countrySelect = document.getElementById('country-select');
-  const currencyDisplay = document.getElementById('currency-display');
+  <div class="setup-shell">
 
-  const placeholder = document.createElement('option');
-  placeholder.value = '';
-  placeholder.textContent = 'Select your country';
-  placeholder.disabled = true;
-  placeholder.selected = true;
-  countrySelect.appendChild(placeholder);
+    <!-- Signup form -->
+    <div class="card setup-card auth-card" id="signup-panel">
+      <div style="display:flex; justify-content:flex-end;">
+        <select data-language-switcher class="form-select" style="width:auto; padding:6px 8px; font-size:0.8rem;" aria-label="Language"></select>
+      </div>
+      <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.getStartedFree">Get started — it's free</span></span>
+      <h1 data-i18n="auth.createAccountTitle">Create your account.</h1>
+      <p class="auth-sub" data-i18n="auth.createAccountSub">Start tracking sales, stock and cash in minutes.</p>
 
-  CURRENCIES.forEach((c) => {
-    const opt = document.createElement('option');
-    opt.value = c.country; // country name is unique; currency code is not (e.g. EUR is shared)
-    opt.textContent = c.country;
-    countrySelect.appendChild(opt);
-  });
+      <div class="auth-error-banner" id="auth-error-banner"></div>
 
-  function updateCurrencyDisplay() {
-    const match = CURRENCIES.find((c) => c.country === countrySelect.value);
-    currencyDisplay.textContent = match ? match.label : 'Select a country first';
-  }
+      <form id="signup-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="name-input" data-i18n="auth.nameLabel">Your name</label>
+          <input type="text" id="name-input" class="form-input" placeholder="Enter your full name" data-i18n-placeholder="auth.namePlaceholder" autocomplete="name" />
+        </div>
 
-  countrySelect.addEventListener('change', updateCurrencyDisplay);
-  updateCurrencyDisplay();
+        <div class="form-group">
+          <label class="form-label" for="username-input" data-i18n="auth.usernameLabel">Username</label>
+          <input type="text" id="username-input" class="form-input" placeholder="Choose a username" data-i18n-placeholder="auth.usernamePlaceholder" autocomplete="username" />
+        </div>
 
-  // Only allow digits in the PIN fields, and cap length defensively
-  // even though maxlength is already set on the inputs.
-  ['pin-input', 'pin-confirm-input'].forEach((id) => {
-    const el = document.getElementById(id);
-    el.addEventListener('input', () => {
-      el.value = el.value.replace(/\D/g, '').slice(0, 4);
-    });
-  });
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="country-select" data-i18n="auth.countryLabel">Country</label>
+            <select id="country-select" class="form-select"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="auth.currencyLabel">Currency</label>
+            <div class="form-input" id="currency-display" style="display:flex; align-items:center; color: var(--color-text-muted);"></div>
+          </div>
+        </div>
 
-  document.getElementById('signup-form').addEventListener('submit', handleSignup);
+        <div class="form-group">
+          <label class="form-label" for="business-name-input" data-i18n="setup.businessNameLabel">Business name</label>
+          <input type="text" id="business-name-input" class="form-input" placeholder="e.g. Tobi Fashion" data-i18n-placeholder="setup.businessNamePlaceholder" autocomplete="organization" />
+        </div>
 
-  // Business type selector
-  let selectedBusinessType = '';
-  document.querySelectorAll('.business-type-option').forEach((option) => {
-    option.addEventListener('click', () => {
-      document.querySelectorAll('.business-type-option').forEach((o) => o.classList.remove('is-selected'));
-      option.classList.add('is-selected');
-      selectedBusinessType = option.getAttribute('data-type');
-    });
-  });
-  // Exposed so handleSignup() can read the current selection.
-  window.getSelectedBusinessType = () => selectedBusinessType;
+        <div class="form-group">
+          <label class="form-label" data-i18n="setup.step2Title">What kind of business is it?</label>
+          <div class="business-type-grid">
+            <div class="business-type-option" data-type="Retail" data-i18n="setup.typeRetail">Retail</div>
+            <div class="business-type-option" data-type="Service" data-i18n="setup.typeService">Service</div>
+            <div class="business-type-option" data-type="Food & Drink" data-i18n="setup.typeFood">Food &amp; Drink</div>
+            <div class="business-type-option" data-type="Freelance" data-i18n="setup.typeFreelance">Freelance / Other</div>
+          </div>
+        </div>
 
-  // Recovery code screen wiring
-  const copyBtn = document.getElementById('copy-recovery-btn');
-  const savedCheckbox = document.getElementById('recovery-saved-checkbox');
-  const continueBtn = document.getElementById('recovery-continue-btn');
-  const codeDisplay = document.getElementById('recovery-code-display');
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="pin-input" data-i18n="auth.pinLabel">4-digit PIN</label>
+            <input type="password" id="pin-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" data-i18n-placeholder="auth.pinPlaceholder" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pin-confirm-input" data-i18n="auth.pinConfirmLabel">Confirm PIN</label>
+            <input type="password" id="pin-confirm-input" class="form-input" placeholder="••••" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="new-password" data-i18n-placeholder="auth.pinPlaceholder" />
+          </div>
+        </div>
 
-  copyBtn.addEventListener('click', () => {
-    const code = codeDisplay.textContent;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(code).then(() => {
-        showToastSafe('Recovery code copied.');
-      }).catch(() => {
-        showToastSafe('Could not copy automatically — please copy it manually.', 'error');
-      });
-    } else {
-      showToastSafe('Please select and copy the code manually.', 'error');
-    }
-  });
+        <label class="checkbox-row">
+          <input type="checkbox" id="terms-checkbox" />
+          <span><span data-i18n="auth.termsAgreePrefix">I agree to the</span> <a href="terms.html" target="_blank" rel="noopener" data-i18n="auth.termsLink">Terms of Use and Privacy Policy</a></span>
+        </label>
 
-  savedCheckbox.addEventListener('change', () => {
-    continueBtn.disabled = !savedCheckbox.checked;
-  });
+        <button type="submit" class="btn btn-primary btn-block" id="signup-submit-btn" data-i18n="auth.createAccountBtn">Create account →</button>
+      </form>
 
-  continueBtn.addEventListener('click', () => {
-    window.location.href = 'dashboard.html';
-  });
-});
+      <p class="auth-footer-link"><span data-i18n="auth.haveAccount">Already have an account?</span> <a href="login.html" data-i18n="nav.signIn">Sign in</a></p>
+    </div>
 
-function showToastSafe(message, variant) {
-  if (typeof showToast === 'function') {
-    showToast(message, variant);
-  }
-}
+    <!-- Recovery code reveal — shown once, right after account creation -->
+    <div class="card setup-card auth-card" id="recovery-panel" style="display:none;">
+      <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
+      <span class="auth-badge"><span class="dot"></span> <span data-i18n="auth.saveThisNow">Save this now</span></span>
+      <h1 data-i18n="auth.yourRecoveryCode">Your recovery code</h1>
+      <p class="auth-sub" data-i18n="auth.recoveryCodeWarning">
+        There's no email on this account, so this code is the <strong>only</strong> way to reset your PIN if you forget it.
+        Write it down or save it somewhere safe — it will not be shown again.
+      </p>
 
-function handleSignup(e) {
-  e.preventDefault();
+      <div id="recovery-code-display" style="font-family: monospace; font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; text-align: center; background: var(--color-primary-light); color: var(--color-primary); padding: 18px 12px; border-radius: 12px; margin: 20px 0; user-select: all;"></div>
 
-  const nameInput = document.getElementById('name-input');
-  const usernameInput = document.getElementById('username-input');
-  const businessNameInput = document.getElementById('business-name-input');
-  const pinInput = document.getElementById('pin-input');
-  const pinConfirmInput = document.getElementById('pin-confirm-input');
-  const termsCheckbox = document.getElementById('terms-checkbox');
-  const countrySelect = document.getElementById('country-select');
-  const errorBanner = document.getElementById('auth-error-banner');
-  const submitBtn = document.getElementById('signup-submit-btn');
+      <button type="button" class="btn btn-secondary btn-block" id="copy-recovery-btn" style="margin-bottom: 16px;" data-i18n="auth.copyCode">Copy code</button>
 
-  [nameInput, usernameInput, businessNameInput, pinInput, pinConfirmInput, countrySelect].forEach((el) => el.classList.remove('is-invalid'));
-  errorBanner.classList.remove('is-visible');
+      <label class="checkbox-row">
+        <input type="checkbox" id="recovery-saved-checkbox" />
+        <span data-i18n="auth.savedRecoveryCode">I've saved my recovery code somewhere safe</span>
+      </label>
 
-  const name = nameInput.value.trim();
-  const username = usernameInput.value.trim();
-  const businessName = businessNameInput.value.trim();
-  const businessType = typeof window.getSelectedBusinessType === 'function' ? window.getSelectedBusinessType() : '';
-  const pin = pinInput.value;
-  const pinConfirm = pinConfirmInput.value;
+      <button type="button" class="btn btn-primary btn-block" id="recovery-continue-btn" disabled style="margin-top: 12px;" data-i18n="auth.continueArrow">Continue →</button>
+    </div>
 
-  let hasError = false;
-  let message = '';
+  </div>
 
-  if (!name) {
-    nameInput.classList.add('is-invalid');
-    message = 'Please enter your full name.';
-    hasError = true;
-  } else if (!username || !isValidUsername(username)) {
-    usernameInput.classList.add('is-invalid');
-    message = 'Username must be at least 3 characters, using only letters, numbers, underscores, or periods.';
-    hasError = true;
-  } else if (isUsernameTaken(username)) {
-    usernameInput.classList.add('is-invalid');
-    message = 'That username is already taken. Try another.';
-    hasError = true;
-  } else if (!countrySelect.value) {
-    countrySelect.classList.add('is-invalid');
-    message = 'Please select your country.';
-    hasError = true;
-  } else if (!businessName) {
-    businessNameInput.classList.add('is-invalid');
-    message = 'Please enter your business name.';
-    hasError = true;
-  } else if (!businessType) {
-    message = 'Please choose the type of business you run.';
-    hasError = true;
-  } else if (!/^\d{4}$/.test(pin)) {
-    pinInput.classList.add('is-invalid');
-    message = 'PIN must be exactly 4 digits.';
-    hasError = true;
-  } else if (pinConfirm !== pin) {
-    pinConfirmInput.classList.add('is-invalid');
-    message = 'PINs do not match.';
-    hasError = true;
-  } else if (!termsCheckbox.checked) {
-    message = 'Please agree to the Terms of Use and Privacy Policy.';
-    hasError = true;
-  }
-
-  if (hasError) {
-    errorBanner.textContent = message;
-    errorBanner.classList.add('is-visible');
-    return;
-  }
-
-  const match = CURRENCIES.find((c) => c.country === countrySelect.value);
-
-  setButtonLoading(submitBtn, true);
-
-  const recoveryCode = createAccount({
-    name,
-    username,
-    pin,
-    country: countrySelect.value,
-    currency: match ? match.code : 'USD'
-  });
-
-  const savedBusiness = saveBusiness({ name: businessName, type: businessType });
-
-  if (!savedBusiness) {
-    setButtonLoading(submitBtn, false);
-    errorBanner.textContent = "Your account was created, but we couldn't save your business info. Check your browser's storage settings and try again from Settings.";
-    errorBanner.classList.add('is-visible');
-    // Don't block them entirely — they can still get in and fix it from Settings.
-    window.location.href = 'dashboard.html';
-    return;
-  }
-
-  // Show the recovery code screen instead of redirecting immediately —
-  // this is the only time it will ever be shown.
-  document.getElementById('signup-panel').style.display = 'none';
-  document.getElementById('recovery-panel').style.display = 'block';
-  document.getElementById('recovery-code-display').textContent = recoveryCode;
-}
-
-function isValidUsername(username) {
-  return /^[a-zA-Z0-9_.]{3,}$/.test(username);
-}
-
-/**
- * Suggests a language code based on a country name, for auto-switching
- * the UI language when someone picks their country at signup.
- * Falls back to 'en' for any country not explicitly mapped, or if the
- * country isn't recognized. Adjust the codes below to match whatever
- * languages i18n.js actually supports in this app.
- */
-function suggestLanguageForCountry(country) {
-  const countryToLanguage = {
-    'France': 'fr',
-    'Germany': 'de',
-    'Spain': 'es',
-    'Mexico': 'es',
-    'Argentina': 'es',
-    'Colombia': 'es',
-    'Chile': 'es',
-    'Italy': 'it',
-    'Brazil': 'pt',
-    'Netherlands': 'nl',
-    'Turkey': 'tr',
-    'Saudi Arabia': 'ar',
-    'United Arab Emirates': 'ar',
-    'Qatar': 'ar',
-    'Egypt': 'ar',
-    'Morocco': 'ar',
-    'China': 'zh',
-    'Japan': 'ja',
-    'South Korea': 'ko',
-    'Vietnam': 'vi',
-    'Indonesia': 'id',
-    'Poland': 'pl',
-    'Sweden': 'sv',
-    'Norway': 'no'
-  };
-
-  return countryToLanguage[country] || 'en';
-}
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+  <script src="i18n.js"></script>
+  <script src="signup.js"></script>
+  <script>
+    // Auto-suggest a language based on the chosen country, unless the
+    // person has already picked a language themselves this visit.
+    (function () {
+      var countrySelect = document.getElementById('country-select');
+      var langSwitcher = document.querySelector('[data-language-switcher]');
+      var manualOverride = false;
+      if (langSwitcher) {
+        langSwitcher.addEventListener('change', function () { manualOverride = true; });
+      }
+      if (countrySelect) {
+        countrySelect.addEventListener('change', function () {
+          if (manualOverride) return;
+          var suggested = suggestLanguageForCountry(countrySelect.value);
+          setLanguage(suggested);
+          if (typeof applyTranslations === 'function') applyTranslations();
+        });
+      }
+    })();
+  </script>
+  <script src="animate.js"></script>
+</body>
+</html>
