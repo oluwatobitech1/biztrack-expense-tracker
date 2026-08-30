@@ -1,184 +1,143 @@
-const INCOME_CATEGORIES = ['Sales', 'Services', 'Delivery', 'Commission', 'Other'];
-const EXPENSE_CATEGORIES = ['Stock', 'Transport', 'Rent', 'Electricity', 'Internet/Data', 'Marketing', 'Staff', 'Equipment', 'Other'];
-const PAYMENT_METHODS = ['Cash', 'Bank Transfer', 'POS', 'Other'];
+let currentFilter = 'all';
+let currentSort = 'newest';
+let searchTerm = '';
+let pendingDeleteId = null;
+let confirmModal = null;
 
-let currentType = 'income';
-let selectedCategory = '';
-let editingId = null;
-let isSubmitting = false;
-
-document.addEventListener('DOMContentLoaded', () => {
-  if (!requireSetup()) return;
-
-  const business = getBusiness();
-  const match = CURRENCIES.find((c) => c.code === business.currency);
-  document.getElementById('currency-prefix').textContent = match ? match.symbol : '$';
+document.addEventListener('DOMContentLoaded', async () => {
+  const allowed = await requireLogin();
+  if (!allowed) return; // already redirecting to login/setup — don't render stale data
 
   const params = new URLSearchParams(window.location.search);
-  editingId = params.get('edit');
-  const presetType = params.get('type');
-
-  renderPaymentMethods();
-
-  document.querySelectorAll('.type-toggle-btn').forEach((btn) => {
-    btn.addEventListener('click', () => setType(btn.getAttribute('data-type')));
-  });
-
-  document.getElementById('date-input').valueAsDate = new Date();
-
-  if (editingId) {
-    loadForEdit(editingId);
-  } else {
-    setType(presetType === 'expense' ? 'expense' : 'income');
+  if (params.get('saved') === '1') {
+    const mode = params.get('mode');
+    showToast(mode === 'edit' ? 'Transaction updated.' : 'Transaction saved.', 'success');
+    window.history.replaceState({}, '', 'transactions.html');
   }
 
-  document.getElementById('transaction-form').addEventListener('submit', handleSubmit);
-
-  document.getElementById('cancel-btn').addEventListener('click', () => {
-    window.history.length > 1 ? window.history.back() : (window.location.href = 'dashboard.html');
+  document.querySelectorAll('[data-filter]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter]').forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      currentFilter = chip.getAttribute('data-filter');
+      renderList();
+    });
   });
+
+  document.getElementById('sort-select').addEventListener('change', (e) => {
+    currentSort = e.target.value;
+    renderList();
+  });
+
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    searchTerm = e.target.value.trim().toLowerCase();
+    renderList();
+  });
+
+  confirmModal = createConfirmModal({
+    modalEl: document.getElementById('delete-modal'),
+    confirmBtn: document.getElementById('confirm-delete-btn'),
+    cancelBtn: document.getElementById('cancel-delete-btn'),
+    onConfirm: () => {
+      if (pendingDeleteId) {
+        deleteTransaction(pendingDeleteId);
+        pendingDeleteId = null;
+        showToast('Transaction deleted.', 'success');
+        renderList();
+      }
+    }
+  });
+
+  renderList();
 });
 
-function setType(type) {
-  currentType = type;
-  document.querySelectorAll('.type-toggle-btn').forEach((btn) => {
-    btn.classList.toggle('is-active', btn.getAttribute('data-type') === type);
-  });
-  selectedCategory = '';
-  renderCategories();
+function renderList() {
+  let transactions = getTransactions();
 
-  const heading = document.getElementById('form-heading');
-  const saveBtn = document.getElementById('save-btn');
-  if (editingId) {
-    heading.textContent = `Edit ${type === 'income' ? 'Income' : 'Expense'}`;
-    saveBtn.textContent = 'Save Changes';
-  } else {
-    heading.textContent = type === 'income' ? 'Add Income' : 'Add Expense';
-    saveBtn.textContent = type === 'income' ? 'Save Income' : 'Save Expense';
+  if (currentFilter === 'income' || currentFilter === 'expense') {
+    transactions = transactions.filter((t) => t.type === currentFilter);
   }
-}
 
-function renderCategories() {
-  const grid = document.getElementById('category-grid');
-  const categories = currentType === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
-  grid.innerHTML = '';
-  categories.forEach((cat) => {
-    const el = document.createElement('div');
-    el.className = 'category-option';
-    el.textContent = cat;
-    el.setAttribute('data-category', cat);
-    if (cat === selectedCategory) el.classList.add('is-selected');
-    el.addEventListener('click', () => {
-      selectedCategory = cat;
-      grid.querySelectorAll('.category-option').forEach((o) => o.classList.remove('is-selected'));
-      el.classList.add('is-selected');
-      clearError('category-error');
-    });
-    grid.appendChild(el);
-  });
-}
+  if (searchTerm) {
+    transactions = transactions.filter(
+      (t) =>
+        t.description.toLowerCase().includes(searchTerm) ||
+        t.category.toLowerCase().includes(searchTerm)
+    );
+  }
 
-function renderPaymentMethods() {
-  const select = document.getElementById('payment-method-select');
-  select.innerHTML = '<option value="">Select payment method</option>' +
-    PAYMENT_METHODS.map((m) => `<option value="${m}">${m}</option>`).join('');
-}
+  transactions = sortTransactions(transactions, currentSort);
 
-function loadForEdit(id) {
-  const txn = getTransactionById(id);
-  if (!txn) {
-    showToast('Transaction not found.', 'error');
-    window.location.href = 'transactions.html';
+  const list = document.getElementById('full-txn-list');
+  const emptyState = document.getElementById('full-txn-empty');
+  const countLabel = document.getElementById('result-count');
+
+  list.innerHTML = '';
+
+  if (transactions.length === 0) {
+    emptyState.style.display = 'block';
+    list.style.display = 'none';
+    countLabel.textContent = '0 transactions';
     return;
   }
-  setType(txn.type);
-  selectedCategory = txn.category;
-  renderCategories();
-  document.getElementById('amount-input').value = txn.amount;
-  document.getElementById('description-input').value = txn.description;
-  document.getElementById('payment-method-select').value = txn.paymentMethod;
-  document.getElementById('date-input').value = txn.date;
+
+  emptyState.style.display = 'none';
+  list.style.display = 'flex';
+  countLabel.textContent = `${transactions.length} transaction${transactions.length === 1 ? '' : 's'}`;
+
+  transactions.forEach((t) => {
+    const row = document.createElement('div');
+    row.className = 'txn-row';
+    row.innerHTML = `
+      <div class="txn-icon txn-icon--${t.type}">${t.type === 'income' ? '0®8' : '9è2'}</div>
+      <div class="txn-info">
+        <div class="txn-desc">${escapeHtml(t.description)}</div>
+        <div class="txn-meta">${escapeHtml(t.category)} ¡¤ ${escapeHtml(t.paymentMethod)} ¡¤ ${formatDate(t.date)}</div>
+      </div>
+      <div class="txn-amount txn-amount--${t.type}">${t.type === 'income' ? '+' : '-'}${formatCurrency(t.amount)}</div>
+      <div class="txn-actions">
+        <button class="icon-btn" data-edit="${t.id}" aria-label="Edit transaction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/></svg>
+        </button>
+        <button class="icon-btn" data-delete="${t.id}" aria-label="Delete transaction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>
+        </button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+
+  list.querySelectorAll('[data-edit]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      window.location.href = `add-transaction.html?edit=${btn.getAttribute('data-edit')}`;
+    });
+  });
+
+  list.querySelectorAll('[data-delete]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      pendingDeleteId = btn.getAttribute('data-delete');
+      confirmModal.open();
+    });
+  });
 }
 
-function clearError(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.remove('is-visible');
+function sortTransactions(transactions, sort) {
+  const sorted = transactions.slice();
+  switch (sort) {
+    case 'oldest':
+      return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+    case 'highest':
+      return sorted.sort((a, b) => Number(b.amount) - Number(a.amount));
+    case 'lowest':
+      return sorted.sort((a, b) => Number(a.amount) - Number(b.amount));
+    case 'newest':
+    default:
+      return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
 }
 
-function setError(id, inputId, message) {
-  const el = document.getElementById(id);
-  el.textContent = message;
-  el.classList.add('is-visible');
-  const input = document.getElementById(inputId);
-  if (input) input.classList.add('is-invalid');
-}
-
-function handleSubmit(e) {
-  e.preventDefault();
-  if (isSubmitting) return;
-
-  const amountInput = document.getElementById('amount-input');
-  const descriptionInput = document.getElementById('description-input');
-  const paymentSelect = document.getElementById('payment-method-select');
-  const dateInput = document.getElementById('date-input');
-
-  [amountInput, descriptionInput, paymentSelect, dateInput].forEach((el) => el.classList.remove('is-invalid'));
-  ['amount-error', 'description-error', 'category-error', 'payment-error', 'date-error'].forEach(clearError);
-
-  let hasError = false;
-  const amount = parseFloat(amountInput.value);
-  const description = descriptionInput.value.trim();
-  const paymentMethod = paymentSelect.value;
-  const date = dateInput.value;
-
-  if (!amountInput.value || isNaN(amount)) {
-    setError('amount-error', 'amount-input', 'Amount is required.');
-    hasError = true;
-  } else if (amount <= 0) {
-    setError('amount-error', 'amount-input', 'Amount must be greater than zero.');
-    hasError = true;
-  }
-
-  if (!description) {
-    setError('description-error', 'description-input', 'Description is required.');
-    hasError = true;
-  }
-
-  if (!selectedCategory) {
-    setError('category-error', null, 'Please select a category.');
-    hasError = true;
-  }
-
-  if (!paymentMethod) {
-    setError('payment-error', 'payment-method-select', 'Payment method is required.');
-    hasError = true;
-  }
-
-  if (!date) {
-    setError('date-error', 'date-input', 'Date is required.');
-    hasError = true;
-  }
-
-  if (hasError) return;
-
-  isSubmitting = true;
-  const saveBtn = document.getElementById('save-btn');
-  saveBtn.disabled = true;
-
-  const payload = {
-    type: currentType,
-    amount,
-    description,
-    category: selectedCategory,
-    paymentMethod,
-    date
-  };
-
-  if (editingId) {
-    updateTransaction(editingId, payload);
-  } else {
-    saveTransaction(payload);
-  }
-
-  window.location.href = `transactions.html?saved=1&mode=${editingId ? 'edit' : 'add'}`;
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
