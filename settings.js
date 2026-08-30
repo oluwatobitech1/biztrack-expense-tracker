@@ -1,7 +1,7 @@
 let clearModal = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!requireSetup()) return;
+  if (!requireLogin()) return;
 
   const business = getBusiness();
   document.getElementById('settings-business-name').value = business.name;
