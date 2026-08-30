@@ -8,7 +8,7 @@ let editingId = null;
 let isSubmitting = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-  requireSetup();
+  if (!requireLogin()) return;
 
   const business = getBusiness();
   const match = CURRENCIES.find((c) => c.code === business.currency);
