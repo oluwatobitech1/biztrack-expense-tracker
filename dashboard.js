@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const allowed = await requireSetup();
+  const allowed = await requireLogin();
   if (!allowed) return; // already redirecting to login/setup — don't render stale data
 
   setGreeting(document.getElementById('greeting-text'));
