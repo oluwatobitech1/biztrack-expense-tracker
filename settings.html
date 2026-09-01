@@ -161,6 +161,24 @@
         </div>
         <div class="note-box">Your data is stored only in this browser. It is not backed up anywhere else, so exporting regularly is a good habit.</div>
       </div>
+
+      <div class="card settings-section" style="max-width: 560px;">
+        <h2>Feedback</h2>
+        <p class="settings-row-desc" style="margin-bottom: 12px;">Spotted a bug or have an idea to improve BizTrack? Send it straight to us.</p>
+        <div class="form-group">
+          <label class="form-label" for="feedback-subject">Subject</label>
+          <select id="feedback-subject" class="form-select">
+            <option value="Bug report">Bug report</option>
+            <option value="Feature idea">Feature idea</option>
+            <option value="General feedback">General feedback</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="feedback-message">Your message</label>
+          <textarea id="feedback-message" class="form-input" rows="5" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+        <button class="btn btn-primary" id="send-feedback-btn">Send Feedback</button>
+      </div>
     </main>
   </div>
 
