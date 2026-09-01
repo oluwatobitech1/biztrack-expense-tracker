@@ -101,7 +101,8 @@ function getDefaultData() {
     settings: {
       theme: 'light',
       language: 'en'
-    }
+    },
+    premium: false
   };
 }
 
@@ -116,7 +117,8 @@ function loadData() {
       session: { ...getDefaultData().session, ...(parsed.session || {}) },
       business: { ...getDefaultData().business, ...(parsed.business || {}) },
       transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
-      settings: { ...getDefaultData().settings, ...(parsed.settings || {}) }
+      settings: { ...getDefaultData().settings, ...(parsed.settings || {}) },
+      premium: Boolean(parsed.premium)
     };
   } catch (err) {
     console.error('BizTrack: failed to read stored data, starting fresh.', err);
@@ -424,4 +426,30 @@ function todayISO() {
 
 function clearAllData() {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+/* ---------- Premium plan ---------- */
+
+/**
+ * Your Stripe payment link. Swap this to your LIVE link (not the
+ * "test_" one) before launching to real customers.
+ */
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_eVqdR8gvt4zW9AN8yseIw00';
+
+/** Free-plan cap on the number of transactions a user can add. */
+const FREE_TRANSACTION_LIMIT = 20;
+
+function isPremium() {
+  return Boolean(loadData().premium);
+}
+
+function setPremium(value) {
+  const data = loadData();
+  data.premium = Boolean(value);
+  return persistData(data);
+}
+
+/** Sends the user to the Stripe payment link to upgrade. */
+function goToUpgrade() {
+  window.location.href = STRIPE_PAYMENT_LINK;
 }
