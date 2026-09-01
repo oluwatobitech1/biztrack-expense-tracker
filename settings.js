@@ -70,6 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('data-count-label').textContent =
     `${getTransactions().length} transaction${getTransactions().length === 1 ? '' : 's'} stored on this device.`;
+
+  document.getElementById('send-feedback-btn').addEventListener('click', () => {
+    const subject = document.getElementById('feedback-subject').value;
+    const message = document.getElementById('feedback-message').value.trim();
+
+    if (!message) {
+      showToast('Please write a message before sending.', 'error');
+      return;
+    }
+
+    const FEEDBACK_EMAIL = 'biztrack8@gmail.com';
+
+    const mailSubject = `BizTrack Feedback: ${subject}`;
+    const mailBody = `${message}\n\n---\nSent from BizTrack Settings`;
+
+    const mailtoLink = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+    window.location.href = mailtoLink;
+
+    document.getElementById('feedback-message').value = '';
+    showToast('Opening your email app...', 'success');
+  });
 });
 
 function setActiveTheme(theme) {
