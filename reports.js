@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (!requireLogin()) return;
 
+  if (!isPremium()) {
+    document.getElementById('reports-content').style.display = 'none';
+    document.getElementById('reports-locked').style.display = 'block';
+    document.getElementById('export-csv-btn').style.display = 'none';
+    document.getElementById('reports-upgrade-btn').addEventListener('click', goToUpgrade);
+    return; // don't bother wiring up filters/rendering for a page they can't see
+  }
+
   document.querySelectorAll('[data-report-range]').forEach((chip) => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('[data-report-range]').forEach((c) => c.classList.remove('is-active'));
