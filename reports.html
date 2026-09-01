@@ -68,43 +68,51 @@
         </button>
       </div>
 
-      <div class="filter-row">
-        <button class="chip" data-report-range="today">Today</button>
-        <button class="chip" data-report-range="week">This Week</button>
-        <button class="chip is-active" data-report-range="month">This Month</button>
-        <button class="chip" data-report-range="year">This Year</button>
-        <button class="chip" data-report-range="all">All Time</button>
+      <div class="card" id="reports-locked" style="display:none; text-align:center; padding: 48px 24px;">
+        <h2 style="margin-bottom: 8px;">Reports is a Premium feature 🔒</h2>
+        <p class="page-subtitle" style="margin-bottom: 20px;">Upgrade to see your income, expenses, and category breakdowns.</p>
+        <button class="btn btn-primary" id="reports-upgrade-btn">Upgrade to Premium</button>
       </div>
 
-      <div class="report-summary-grid">
-        <div class="card stat-card">
-          <span class="stat-label">Total Income</span>
-          <div class="stat-value stat-value--income" id="report-income">0</div>
+      <div id="reports-content">
+        <div class="filter-row">
+          <button class="chip" data-report-range="today">Today</button>
+          <button class="chip" data-report-range="week">This Week</button>
+          <button class="chip is-active" data-report-range="month">This Month</button>
+          <button class="chip" data-report-range="year">This Year</button>
+          <button class="chip" data-report-range="all">All Time</button>
         </div>
-        <div class="card stat-card">
-          <span class="stat-label">Total Expenses</span>
-          <div class="stat-value stat-value--expense" id="report-expenses">0</div>
-        </div>
-        <div class="card stat-card">
-          <span class="stat-label">Net Profit</span>
-          <div class="stat-value stat-value--profit" id="report-profit">0</div>
-        </div>
-      </div>
 
-      <div class="report-charts-grid">
-        <div class="card">
-          <div class="card-header"><h2 class="section-title">Income by Category</h2></div>
-          <div class="breakdown-list" id="income-breakdown-list"></div>
-          <div class="empty-state" id="income-chart-empty" style="display:none; padding: 24px;">
-            <p>No income recorded for this period.</p>
+        <div class="report-summary-grid">
+          <div class="card stat-card">
+            <span class="stat-label">Total Income</span>
+            <div class="stat-value stat-value--income" id="report-income">0</div>
+          </div>
+          <div class="card stat-card">
+            <span class="stat-label">Total Expenses</span>
+            <div class="stat-value stat-value--expense" id="report-expenses">0</div>
+          </div>
+          <div class="card stat-card">
+            <span class="stat-label">Net Profit</span>
+            <div class="stat-value stat-value--profit" id="report-profit">0</div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header"><h2 class="section-title">Expenses by Category</h2></div>
-          <div class="breakdown-list" id="expense-breakdown-list"></div>
-          <div class="empty-state" id="expense-chart-empty" style="display:none; padding: 24px;">
-            <p>No expenses recorded for this period.</p>
+        <div class="report-charts-grid">
+          <div class="card">
+            <div class="card-header"><h2 class="section-title">Income by Category</h2></div>
+            <div class="breakdown-list" id="income-breakdown-list"></div>
+            <div class="empty-state" id="income-chart-empty" style="display:none; padding: 24px;">
+              <p>No income recorded for this period.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><h2 class="section-title">Expenses by Category</h2></div>
+            <div class="breakdown-list" id="expense-breakdown-list"></div>
+            <div class="empty-state" id="expense-chart-empty" style="display:none; padding: 24px;">
+              <p>No expenses recorded for this period.</p>
+            </div>
           </div>
         </div>
       </div>
