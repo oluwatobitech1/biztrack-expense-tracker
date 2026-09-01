@@ -1,7 +1,45 @@
 let clearModal = null;
 
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_eVqdR8gvt4zW9AN8yseIw00'; // TODO: replace with your LIVE link before launch
+
+function isPremium() {
+  return localStorage.getItem('biztrack_premium') === 'true';
+}
+
+function renderPremiumStatus() {
+  const statusLabel = document.getElementById('premium-status-label');
+  const noteBox = document.getElementById('premium-note-box');
+  const upgradeBtn = document.getElementById('upgrade-premium-btn');
+
+  if (isPremium()) {
+    statusLabel.textContent = 'Premium plan — active';
+    noteBox.textContent = 'Thanks for upgrading! All premium features are unlocked on this device.';
+    upgradeBtn.style.display = 'none';
+  } else {
+    statusLabel.textContent = 'Free plan';
+    noteBox.textContent = 'Upgrade to unlock premium features in BizTrack.';
+    upgradeBtn.style.display = '';
+    upgradeBtn.textContent = 'Upgrade';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   if (!requireLogin()) return;
+
+  // Handle return from Stripe payment link
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('premium') === 'success') {
+    localStorage.setItem('biztrack_premium', 'true');
+    showToast('Payment successful — Premium unlocked!', 'success');
+    // Clean the URL so refreshing doesn't re-trigger this
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  renderPremiumStatus();
+
+  document.getElementById('upgrade-premium-btn').addEventListener('click', () => {
+    window.location.href = STRIPE_PAYMENT_LINK;
+  });
 
   const business = getBusiness();
   document.getElementById('settings-business-name').value = business.name;
