@@ -1,26 +1,29 @@
 let clearModal = null;
 
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_eVqdR8gvt4zW9AN8yseIw00'; // TODO: replace with your LIVE link before launch
-
-function isPremium() {
-  return localStorage.getItem('biztrack_premium') === 'true';
-}
-
 function renderPremiumStatus() {
   const statusLabel = document.getElementById('premium-status-label');
   const noteBox = document.getElementById('premium-note-box');
   const upgradeBtn = document.getElementById('upgrade-premium-btn');
+  const exportBtn = document.getElementById('export-csv-settings-btn');
 
   if (isPremium()) {
     statusLabel.textContent = 'Premium plan — active';
     noteBox.textContent = 'Thanks for upgrading! All premium features are unlocked on this device.';
     upgradeBtn.style.display = 'none';
+    if (exportBtn) exportBtn.textContent = 'Export CSV';
   } else {
     statusLabel.textContent = 'Free plan';
-    noteBox.textContent = 'Upgrade to unlock premium features in BizTrack.';
+    noteBox.textContent = 'Upgrade to unlock Reports, CSV export, unlimited transactions, and full branding.';
     upgradeBtn.style.display = '';
     upgradeBtn.textContent = 'Upgrade';
+    if (exportBtn) exportBtn.textContent = 'Export CSV 🔒';
   }
+}
+
+function renderLogoUpsell() {
+  const note = document.getElementById('logo-upsell-note');
+  if (!note) return;
+  note.style.display = isPremium() ? 'none' : 'block';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,17 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle return from Stripe payment link
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('premium') === 'success') {
-    localStorage.setItem('biztrack_premium', 'true');
+    setPremium(true);
     showToast('Payment successful — Premium unlocked!', 'success');
     // Clean the URL so refreshing doesn't re-trigger this
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   renderPremiumStatus();
+  renderLogoUpsell();
 
-  document.getElementById('upgrade-premium-btn').addEventListener('click', () => {
-    window.location.href = STRIPE_PAYMENT_LINK;
-  });
+  document.getElementById('upgrade-premium-btn').addEventListener('click', goToUpgrade);
 
   const business = getBusiness();
   document.getElementById('settings-business-name').value = business.name;
@@ -86,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('export-csv-settings-btn').addEventListener('click', () => {
+    if (!isPremium()) {
+      showToast('CSV export is a Premium feature. Upgrade to unlock it.', 'error');
+      return;
+    }
     if (getTransactions().length === 0) {
       showToast('No transactions to export yet.', 'error');
       return;
