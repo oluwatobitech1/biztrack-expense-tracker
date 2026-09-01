@@ -10,6 +10,18 @@ let isSubmitting = false;
 document.addEventListener('DOMContentLoaded', () => {
   if (!requireLogin()) return;
 
+  if (!isPremium()) {
+    const note = document.getElementById('free-limit-note');
+    const used = getTransactions().length;
+    const remaining = Math.max(FREE_TRANSACTION_LIMIT - used, 0);
+    if (note) {
+      note.style.display = 'block';
+      note.textContent = remaining > 0
+        ? `Free plan: ${remaining} of ${FREE_TRANSACTION_LIMIT} transactions remaining. Upgrade for unlimited.`
+        : `Free plan limit reached (${FREE_TRANSACTION_LIMIT} transactions). Upgrade to add more.`;
+    }
+  }
+
   const business = getBusiness();
   const match = CURRENCIES.find((c) => c.code === business.currency);
   document.getElementById('currency-prefix').textContent = match ? match.symbol : '$';
@@ -160,6 +172,13 @@ function handleSubmit(e) {
   }
 
   if (hasError) return;
+
+  // Free-plan cap: only applies to NEW transactions, not edits.
+  if (!editingId && !isPremium() && getTransactions().length >= FREE_TRANSACTION_LIMIT) {
+    showToast(`Free plan is limited to ${FREE_TRANSACTION_LIMIT} transactions. Upgrade to add more.`, 'error');
+    setTimeout(goToUpgrade, 1200);
+    return;
+  }
 
   isSubmitting = true;
   const saveBtn = document.getElementById('save-btn');
