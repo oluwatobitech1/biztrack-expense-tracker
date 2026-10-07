@@ -3,41 +3,248 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BizTrack</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>BizTrack – Simple Expense &amp; Profit Tracker for Small Businesses</title>
+  <meta name="description" content="Track income, expenses and profit from one simple dashboard. BizTrack is an expense tracker for small businesses, with multi-currency support, 5 languages, and an installable app. Start free." />
+  <link rel="canonical" href="https://biztrack.top/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#1B5E42" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BizTrack" />
+  <meta property="og:title" content="BizTrack – Simple Expense & Profit Tracker for Small Businesses" />
+  <meta property="og:description" content="Track income, expenses and profit from one simple dashboard. Start free." />
+  <meta property="og:url" content="https://biztrack.top/" />
+  <meta property="og:image" content="https://biztrack.top/icon-512.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="BizTrack – Simple Expense & Profit Tracker for Small Businesses" />
+  <meta name="twitter:description" content="Track income, expenses and profit from one simple dashboard. Start free." />
+  <meta name="twitter:image" content="https://biztrack.top/icon-512.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png" />
   <link rel="shortcut icon" href="icons/favicon.ico" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#1B5E42" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://biztrack.top/#website",
+        "url": "https://biztrack.top/",
+        "name": "BizTrack"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "BizTrack",
+        "url": "https://biztrack.top/",
+        "description": "Expense and profit tracker for small businesses. Track income, expenses and profit from one simple dashboard.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any (web browser, installable as an app)",
+        "inLanguage": ["en", "fr", "es", "pt", "ar"],
+        "image": "https://biztrack.top/icon-512.png"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is BizTrack?",
+            "acceptedAnswer": { "@type": "Answer", "text": "BizTrack is a simple expense and profit tracker for small businesses. You record income and expenses, and the dashboard shows what came in, what went out and what you kept." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is BizTrack free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "You can create an account and start tracking for free. Some features, such as Reports and CSV export, are part of Premium." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where is my data stored?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Your data is stored in your own browser on your device, not on a BizTrack server. Because it is not backed up elsewhere, export it regularly." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which currencies and languages does BizTrack support?",
+            "acceptedAnswer": { "@type": "Answer", "text": "BizTrack supports currencies for countries across Africa, the Americas, Europe and Asia, and is available in English, French, Spanish, Portuguese and Arabic." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I install BizTrack on my phone?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. BizTrack is an installable web app. Open it in your phone's browser and choose Add to Home Screen, or use the install prompt." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root{--green:#1B5E42;--green-dark:#123D2B;--green-light:#E4F0EA;--bg:#F6F7F5;--text:#1F2A24;--muted:#667169;--border:#E4E7E2;--income:#1E8E5A;--expense:#C6432F;--profit:#0E7C86}
+    *{box-sizing:border-box;margin:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:#fff;line-height:1.6}
+    h1,h2,h3{font-family:'Sora',system-ui,sans-serif;line-height:1.2;color:var(--green-dark)}
+    a{color:var(--green)}
+    .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+    header.top{border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:5}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:1.15rem;color:var(--green-dark);text-decoration:none}
+    .brand img{width:32px;height:32px;border-radius:8px}
+    .nav-links{display:flex;gap:12px;align-items:center}
+    .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;text-decoration:none;font-size:.95rem;border:1px solid transparent}
+    .btn-primary{background:var(--green);color:#fff}
+    .btn-primary:hover{background:var(--green-dark)}
+    .btn-ghost{color:var(--green);border-color:var(--border)}
+    .hero{background:linear-gradient(180deg,var(--green-light),#fff);padding:72px 0 56px;text-align:center}
+    .hero h1{font-size:clamp(2rem,5vw,3.2rem);max-width:760px;margin:0 auto 18px;font-weight:800}
+    .hero p.lead{max-width:620px;margin:0 auto 28px;color:var(--muted);font-size:1.1rem}
+    .hero .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .hero small{display:block;margin-top:14px;color:var(--muted)}
+    section{padding:64px 0}
+    section.alt{background:var(--bg)}
+    h2{font-size:clamp(1.5rem,3.5vw,2.1rem);text-align:center;margin-bottom:12px}
+    .sub{text-align:center;color:var(--muted);max-width:620px;margin:0 auto 40px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px}
+    .card h3{font-size:1.1rem;margin-bottom:8px}
+    .card p{color:var(--muted);font-size:.96rem}
+    .stat{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
+    .in{color:var(--income)}.out{color:var(--expense)}.pr{color:var(--profit)}
+    ol.steps{list-style:none;padding:0;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+    ol.steps li{counter-increment:s;background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px}
+    ol.steps li::before{content:counter(s);display:inline-flex;width:32px;height:32px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
+    ol.steps h3{font-size:1.05rem;margin-bottom:6px}
+    ol.steps p{color:var(--muted);font-size:.95rem}
+    .faq{max-width:760px;margin:0 auto}
+    details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px}
+    summary{cursor:pointer;font-weight:600;font-family:'Sora',sans-serif;font-size:1rem}
+    details p{margin-top:10px;color:var(--muted)}
+    .final{background:var(--green);text-align:center;color:#fff}
+    .final h2{color:#fff}
+    .final p{color:#d6eadf;margin-bottom:24px}
+    .final .btn-primary{background:#fff;color:var(--green-dark)}
+    footer{padding:28px 0;border-top:1px solid var(--border);font-size:.9rem;color:var(--muted)}
+    footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    footer a{color:var(--muted);margin-left:16px}
+    @media(max-width:520px){.nav-links .btn-ghost{display:none}}
+  </style>
 </head>
 <body>
 
-  <div class="setup-shell">
-    <div class="card setup-card auth-card" style="text-align:center;">
-      <img class="auth-logo" src="logo-mark.png" alt="BizTrack logo" />
-      <p style="color: var(--color-text-muted); margin-top: 12px;">Loading BizTrack…</p>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="/"><img src="logo-mark.png" alt="BizTrack logo" width="32" height="32" /> BizTrack</a>
+      <nav class="nav-links" aria-label="Main">
+        <a class="btn btn-ghost" href="login.html">Sign in</a>
+        <a class="btn btn-primary" href="signup.html">Get started</a>
+      </nav>
     </div>
-  </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <h1>The simple expense &amp; profit tracker for small businesses</h1>
+        <p class="lead">Record your sales and spending in seconds, and see exactly how much profit your business is making, all from one clean dashboard.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="signup.html">Create your free account</a>
+          <a class="btn btn-ghost" href="#how-it-works">See how it works</a>
+        </div>
+        <small>No spreadsheets. No accounting jargon. Works on your phone.</small>
+      </div>
+    </div>
+
+    <section id="features">
+      <div class="wrap">
+        <h2>Everything you need to know where your money goes</h2>
+        <p class="sub">BizTrack keeps bookkeeping light, so you can spend your time running the business.</p>
+        <div class="grid">
+          <div class="card"><div class="stat in">Income</div><h3>Track every sale</h3><p>Log money coming in with a category and date, so nothing slips through the cracks.</p></div>
+          <div class="card"><div class="stat out">Expenses</div><h3>Control your spending</h3><p>Record business expenses as they happen and see which categories cost you the most.</p></div>
+          <div class="card"><div class="stat pr">Profit</div><h3>See your profit instantly</h3><p>The dashboard compares income against expenses, so your profit is always one glance away.</p></div>
+          <div class="card"><h3>Reports and CSV export</h3><p>Break income and expenses down by category and export your records. Part of BizTrack Premium.</p></div>
+          <div class="card"><h3>Works in your currency</h3><p>Pick your country at signup and BizTrack uses your local currency across the app, from Naira and Cedis to Dollars and Euros.</p></div>
+          <div class="card"><h3>English, Français, Español, Português, العربية</h3><p>Use BizTrack in the language you run your business in, including right-to-left Arabic.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="alt">
+      <div class="wrap">
+        <h2>Start tracking in three steps</h2>
+        <p class="sub">Set up takes a couple of minutes.</p>
+        <ol class="steps">
+          <li><h3>Create your account</h3><p>Choose a username and a 4-digit PIN, then tell BizTrack about your business and country.</p></li>
+          <li><h3>Add your transactions</h3><p>Record each sale or expense with an amount, category and date. It takes seconds.</p></li>
+          <li><h3>Watch your profit</h3><p>Open the dashboard to compare income and expenses and spot trends.</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="wrap">
+        <h2>Built for busy business owners</h2>
+        <p class="sub">A lightweight business expense tracker that gets out of your way.</p>
+        <div class="grid">
+          <div class="card"><h3>Install it like an app</h3><p>Add BizTrack to your home screen from your browser. It opens full screen and loads quickly, even on a slow connection.</p></div>
+          <div class="card"><h3>Your data stays with you</h3><p>Your records are stored in your own browser, not on a BizTrack server. Export regularly to keep a backup.</p></div>
+          <div class="card"><h3>Simple by design</h3><p>No accounting training needed. If you can write down what you earned and spent, you can use BizTrack.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="alt">
+      <div class="wrap">
+        <h2>Frequently asked questions</h2>
+        <p class="sub">Quick answers about BizTrack.</p>
+        <div class="faq">
+          <details><summary>What is BizTrack?</summary><p>BizTrack is a simple expense and profit tracker for small businesses. You record income and expenses, and the dashboard shows what came in, what went out and what you kept.</p></details>
+          <details><summary>Is BizTrack free?</summary><p>You can create an account and start tracking for free. Some features, such as Reports and CSV export, are part of Premium.</p></details>
+          <details><summary>Where is my data stored?</summary><p>Your data is stored in your own browser on your device, not on a BizTrack server. Because it is not backed up elsewhere, export it regularly.</p></details>
+          <details><summary>Which currencies and languages does BizTrack support?</summary><p>BizTrack supports currencies for countries across Africa, the Americas, Europe and Asia, and is available in English, French, Spanish, Portuguese and Arabic.</p></details>
+          <details><summary>Can I install BizTrack on my phone?</summary><p>Yes. BizTrack is an installable web app. Open it in your phone's browser and choose Add to Home Screen, or use the install prompt.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <h2>Know your numbers. Grow your business.</h2>
+        <p>Create your BizTrack account and record your first transaction today.</p>
+        <a class="btn btn-primary" href="signup.html">Get started free</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="yr">2026</span> BizTrack</span>
+      <span><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a><a href="login.html">Sign in</a></span>
+    </div>
+  </footer>
 
   <script src="storage.js"></script>
   <script>
-    // No landing page — send people straight to where they belong.
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Signed-in users and the installed app skip the landing page.
+    // Visitors and search engines see the full page above.
     (async function () {
-      const loggedIn = await isLoggedIn();
-      if (loggedIn) {
-        // bootstrapData() is only defined on pages that load a backend
-        // sync script (e.g. supabase-client.js). Guard the call so a
-        // page that hasn't loaded one doesn't crash and get stuck on
-        // this loading screen forever.
-        if (typeof bootstrapData === 'function') {
-          await bootstrapData();
+      try {
+        const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const loggedIn = await isLoggedIn();
+        if (loggedIn) {
+          if (typeof bootstrapData === 'function') { await bootstrapData(); }
+          window.location.replace('dashboard.html');
+        } else if (standalone) {
+          window.location.replace('login.html');
         }
-        window.location.replace('dashboard.html');
-      } else {
-        window.location.replace('login.html');
-      }
+      } catch (e) { /* stay on the landing page */ }
     })();
   </script>
 </body>
