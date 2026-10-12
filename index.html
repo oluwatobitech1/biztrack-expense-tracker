@@ -30,6 +30,9 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
 
+  <!-- Google AdSense site verification / loader -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4642781642169453" crossorigin="anonymous"></script>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -132,6 +135,9 @@
     footer{padding:28px 0;border-top:1px solid var(--border);font-size:.9rem;color:var(--muted)}
     footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
     footer a{color:var(--muted);margin-left:16px}
+    .ad-slot{margin:24px auto;min-height:100px;text-align:center;overflow:hidden}
+    .ad-slot .ad-label{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .ad-slot:has(ins[data-ad-status="unfilled"]){display:none}
     @media(max-width:520px){.nav-links .btn-ghost{display:none}}
   </style>
 </head>
@@ -199,6 +205,8 @@
       </div>
     </section>
 
+    <div class="wrap"><div class="ad-slot" data-ad="landing"></div></div>
+
     <section id="faq" class="alt">
       <div class="wrap">
         <h2>Frequently asked questions</h2>
@@ -230,6 +238,7 @@
   </footer>
 
   <script src="storage.js"></script>
+  <script src="ads.js"></script>
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
 

@@ -14,7 +14,7 @@
  * cache is only used as a fallback when there's no network.
  */
 
-const CACHE_NAME = 'biztrack-shell-v4';
+const CACHE_NAME = 'biztrack-shell-v5';
 
 const APP_SHELL = [
   'index.html',
@@ -37,6 +37,7 @@ const APP_SHELL = [
   'animate.js',
   'assistant.js',
   'install.js',
+  'ads.js',
   'login.js',
   'signup.js',
   'dashboard.js',
@@ -80,6 +81,9 @@ self.addEventListener('activate', (event) => {
 // and only fall back to the cache if the network request fails.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // Leave third-party requests (Google Fonts, AdSense) to the browser so ad
+  // scripts/responses are never cached or replayed from the cache.
+  if (new URL(event.request.url).origin !== self.location.origin) return;
 
   event.respondWith(
     fetch(event.request)

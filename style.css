@@ -1923,3 +1923,26 @@ body.modal-open {
 .mt-24 { margin-top: 24px; }
 .text-muted { color: var(--color-text-muted); }
 .text-center { text-align: center; }
+
+/* ---------- Ads (Google AdSense) ---------- */
+.ad-slot {
+  margin: 24px auto;
+  max-width: 100%;
+  min-height: 100px;
+  text-align: center;
+  overflow: hidden;
+  clear: both;
+}
+.ad-slot .ad-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #667169);
+  margin-bottom: 6px;
+}
+/* Collapse the box when Google has no ad to show. */
+.ad-slot:has(ins[data-ad-status="unfilled"]) { display: none; }
+@media (max-width: 900px) {
+  /* keep ads clear of the fixed bottom nav */
+  .ad-slot { margin-bottom: 32px; }
+}
