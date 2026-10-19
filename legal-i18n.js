@@ -48,7 +48,7 @@
       s12Title: '12. Changes to These Terms',
       s12Body: 'We may update these Terms from time to time. If we make material changes, we will update the "last updated" date and, where appropriate, let you know within the app. Continuing to use BizTrack after changes take effect means you accept the updated Terms.',
       s13Title: '13. Contact',
-      s13Body: 'Questions about these Terms? Contact Oluwatobi Ayodele at support@biztrack.app.'
+      s13Body: 'Questions about these Terms? Contact Oluwatobi Ayodele at support@biztrack.top.'
     },
     privacy: {
       title: 'Privacy Policy',
@@ -82,7 +82,7 @@
       s11Title: '11. Changes to This Policy',
       s11Body: 'We may update this Privacy Policy from time to time. We will update the "last updated" date, and where changes are material, we will make reasonable efforts to notify you.',
       s12Title: '12. Contact',
-      s12Body: 'Questions about this Privacy Policy or your data? Contact Oluwatobi Ayodele at support@biztrack.app.'
+      s12Body: 'Questions about this Privacy Policy or your data? Contact Oluwatobi Ayodele at support@biztrack.top.'
     }
   };
 
@@ -124,7 +124,7 @@
       s12Title: '12. Modifications des présentes Conditions',
       s12Body: 'Nous pouvons mettre à jour ces Conditions de temps à autre. En cas de changement important, nous mettrons à jour la date de « dernière mise à jour » et, le cas échéant, vous en informerons dans l\'application. Continuer à utiliser BizTrack après l\'entrée en vigueur des modifications signifie que vous acceptez les Conditions mises à jour.',
       s13Title: '13. Contact',
-      s13Body: 'Des questions sur ces Conditions ? Contactez Oluwatobi Ayodele à support@biztrack.app.'
+      s13Body: 'Des questions sur ces Conditions ? Contactez Oluwatobi Ayodele à support@biztrack.top.'
     },
     privacy: {
       title: 'Politique de confidentialité',
@@ -158,7 +158,7 @@
       s11Title: '11. Modifications de cette politique',
       s11Body: 'Nous pouvons mettre à jour cette Politique de confidentialité de temps à autre. Nous mettrons à jour la date de « dernière mise à jour », et en cas de changement important, nous ferons des efforts raisonnables pour vous en informer.',
       s12Title: '12. Contact',
-      s12Body: 'Des questions sur cette Politique de confidentialité ou vos données ? Contactez Oluwatobi Ayodele à support@biztrack.app.'
+      s12Body: 'Des questions sur cette Politique de confidentialité ou vos données ? Contactez Oluwatobi Ayodele à support@biztrack.top.'
     }
   };
 
@@ -200,7 +200,7 @@
       s12Title: '12. Cambios a estas Condiciones',
       s12Body: 'Podemos actualizar estas Condiciones de vez en cuando. Si realizamos cambios importantes, actualizaremos la fecha de «última actualización» y, cuando corresponda, se lo notificaremos dentro de la aplicación. Continuar utilizando BizTrack después de que los cambios entren en vigor significa que acepta las Condiciones actualizadas.',
       s13Title: '13. Contacto',
-      s13Body: '¿Preguntas sobre estas Condiciones? Contacte a Oluwatobi Ayodele en support@biztrack.app.'
+      s13Body: '¿Preguntas sobre estas Condiciones? Contacte a Oluwatobi Ayodele en support@biztrack.top.'
     },
     privacy: {
       title: 'Política de privacidad',
@@ -234,7 +234,7 @@
       s11Title: '11. Cambios a esta política',
       s11Body: 'Podemos actualizar esta Política de privacidad de vez en cuando. Actualizaremos la fecha de «última actualización» y, cuando los cambios sean importantes, haremos esfuerzos razonables para notificárselo.',
       s12Title: '12. Contacto',
-      s12Body: '¿Preguntas sobre esta Política de privacidad o sus datos? Contacte a Oluwatobi Ayodele en support@biztrack.app.'
+      s12Body: '¿Preguntas sobre esta Política de privacidad o sus datos? Contacte a Oluwatobi Ayodele en support@biztrack.top.'
     }
   };
 
@@ -276,7 +276,7 @@
       s12Title: '12. Alterações a estes Termos',
       s12Body: 'Podemos atualizar estes Termos periodicamente. Se fizermos alterações materiais, atualizaremos a data de «última atualização» e, quando apropriado, o notificaremos dentro do aplicativo. Continuar a usar o BizTrack após a entrada em vigor das alterações significa que você aceita os Termos atualizados.',
       s13Title: '13. Contato',
-      s13Body: 'Dúvidas sobre estes Termos? Entre em contato com Oluwatobi Ayodele em support@biztrack.app.'
+      s13Body: 'Dúvidas sobre estes Termos? Entre em contato com Oluwatobi Ayodele em support@biztrack.top.'
     },
     privacy: {
       title: 'Política de Privacidade',
@@ -310,7 +310,7 @@
       s11Title: '11. Alterações a esta política',
       s11Body: 'Podemos atualizar esta Política de Privacidade periodicamente. Atualizaremos a data de «última atualização» e, quando as alterações forem significativas, faremos esforços razoáveis para notificá-lo.',
       s12Title: '12. Contato',
-      s12Body: 'Dúvidas sobre esta Política de Privacidade ou seus dados? Entre em contato com Oluwatobi Ayodele em support@biztrack.app.'
+      s12Body: 'Dúvidas sobre esta Política de Privacidade ou seus dados? Entre em contato com Oluwatobi Ayodele em support@biztrack.top.'
     }
   };
 
@@ -352,7 +352,7 @@
       s12Title: '12. تغييرات على هذه الشروط',
       s12Body: 'يجوز لنا تحديث هذه الشروط من وقت لآخر. إذا أجرينا تغييرات جوهرية، سنُحدّث تاريخ "آخر تحديث"، وسنُعلمك داخل التطبيق عند الاقتضاء. استمرارك في استخدام BizTrack بعد سريان التغييرات يعني قبولك للشروط المُحدَّثة.',
       s13Title: '13. التواصل',
-      s13Body: 'لديك أسئلة حول هذه الشروط؟ تواصل مع أولوواتوبي أيوديلي عبر support@biztrack.app.'
+      s13Body: 'لديك أسئلة حول هذه الشروط؟ تواصل مع أولوواتوبي أيوديلي عبر support@biztrack.top.'
     },
     privacy: {
       title: 'سياسة الخصوصية',
@@ -386,7 +386,7 @@
       s11Title: '11. تغييرات على هذه السياسة',
       s11Body: 'يجوز لنا تحديث سياسة الخصوصية هذه من وقت لآخر. سنُحدّث تاريخ "آخر تحديث"، وعندما تكون التغييرات جوهرية، سنبذل جهودًا معقولة لإخطارك.',
       s12Title: '12. التواصل',
-      s12Body: 'لديك أسئلة حول سياسة الخصوصية هذه أو بياناتك؟ تواصل مع أولوواتوبي أيوديلي عبر support@biztrack.app.'
+      s12Body: 'لديك أسئلة حول سياسة الخصوصية هذه أو بياناتك؟ تواصل مع أولوواتوبي أيوديلي عبر support@biztrack.top.'
     }
   };
 })();

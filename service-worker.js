@@ -14,7 +14,7 @@
  * cache is only used as a fallback when there's no network.
  */
 
-const CACHE_NAME = 'biztrack-shell-v5';
+const CACHE_NAME = 'biztrack-shell-v6';
 
 const APP_SHELL = [
   'index.html',
